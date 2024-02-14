@@ -10,16 +10,14 @@ import UIKit
 class RegistrationViewController: UIViewController {
     
     // MARK: - Subviews
-    private let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Регистрация"
-        label.font = .systemFont(ofSize: 25)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    private let titleLabel = UILabel(text: "Регистрация",
+                                     font: .systemFont(ofSize: 30))
     
     private let nameTextField = CustomTextField(placeholder: "Имя")
     private let numberTextField = CustomTextField(placeholder: "Номер телефона")
+    
+    private let ageLabel = UILabel(text: "Возраст:", 
+                                   font: .systemFont(ofSize: 18))
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +31,6 @@ class RegistrationViewController: UIViewController {
     private func setupAppearance() {
         view.backgroundColor = .white
     }
-
 }
 
 //MARK: - Embed Views
@@ -43,7 +40,8 @@ private extension RegistrationViewController {
         [
             titleLabel,
             nameTextField,
-            numberTextField
+            numberTextField,
+            ageLabel
         ].forEach { view.addSubview($0) }
     }
     
@@ -67,6 +65,8 @@ private extension RegistrationViewController {
             numberTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             numberTextField.heightAnchor.constraint(equalToConstant: 45),
             
+            ageLabel.topAnchor.constraint(equalTo: numberTextField.bottomAnchor, constant: 30),
+            ageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
         ])
     }
 }
