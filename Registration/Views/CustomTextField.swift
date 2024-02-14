@@ -34,11 +34,14 @@ final class CustomTextField: UITextField {
         border.translatesAutoresizingMaskIntoConstraints = false
         addSubview(border)
     }
+    
+    func setBorderColor(_ color: UIColor) {
+        border.backgroundColor = color
+    }
 }
 
 //MARK: - Setup Layout
 private extension CustomTextField {
-    
     func setupLayout() {
         NSLayoutConstraint.activate([
             border.leadingAnchor.constraint(equalTo: leadingAnchor),

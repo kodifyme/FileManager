@@ -16,15 +16,15 @@ class RegistrationViewController: UIViewController {
     private let nameTextField = CustomTextField(placeholder: "Имя")
     private let numberTextField = CustomTextField(placeholder: "Номер телефона")
     
-    private let ageLabel = UILabel(text: "Возраст:", 
-                                   font: .systemFont(ofSize: 18))
+    private var ageLabel = UILabel()
     
-    private let ageSlider: UISlider = {
+    private lazy var ageSlider: UISlider = {
         let slider = UISlider()
-        slider.minimumValue = 0
-        slider.minimumValue = 100
+        slider.minimumValue = 6
+        slider.maximumValue = 100
         slider.value = 6
         slider.minimumTrackTintColor = .blue
+        slider.addTarget(self, action: #selector(sliderValueChanged), for: .valueChanged)
         slider.translatesAutoresizingMaskIntoConstraints = false
         return slider
     }()
@@ -63,6 +63,9 @@ class RegistrationViewController: UIViewController {
         setupAppearance()
         embedViews()
         setupLayout()
+        setDelegate()
+        addTaps()
+        registerKeyboardNotification()
     }
     
     // MARK: - Private Methods
@@ -70,16 +73,36 @@ class RegistrationViewController: UIViewController {
         view.backgroundColor = .white
     }
     
+    // MARK: - Set Delegate
+    private func setDelegate() {
+        nameTextField.delegate = self
+        numberTextField.delegate = self
+    }
+    
+    @objc
+    private func sliderValueChanged() {
+        let ageValue = Int(ageSlider.value)
+        ageLabel.text = "Возраст: \(ageValue)"
+    }
+    
     @objc
     private func didTap() {
-        print("Oke")
+        nameTextField.setBorderColor(nameTextField.text?.isEmpty ?? true ? .red : .gray)
+        numberTextField.setBorderColor(numberTextField.text?.isEmpty ?? true ? .red : .gray)
+        
+        guard let userName = nameTextField.text, !userName.isEmpty,
+              let phoneNumber = numberTextField.text, !phoneNumber.isEmpty else {
+            return
+        }
+        
+        print("Имя: \(userName), \nНомер телефона: \(phoneNumber), \nВозраст: \(Int(ageSlider.value)), \nПол: \(genderSegmentControl.titleForSegment(at: genderSegmentControl.selectedSegmentIndex) ?? "")")
     }
 }
 
 //MARK: - Embed Views
 private extension RegistrationViewController {
-    
     func embedViews() {
+        ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))", font: .systemFont(ofSize: 18))
         noticeStackView = UIStackView(arrangedSubviews: [noticeLabel, noticeSwitch],
                                       axis: .horizontal,
                                       spacing: 20)
@@ -96,9 +119,85 @@ private extension RegistrationViewController {
     }
 }
 
+//MARK: - UITextFieldDelegate
+extension RegistrationViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        nameTextField.resignFirstResponder()
+        numberTextField.resignFirstResponder()
+        return true
+    }
+}
+
+//MARK: -
+private extension RegistrationViewController {
+    var originalContentOffset: CGPoint {
+        return CGPoint(x: 0, y: 0)
+    }
+    
+    func registerKeyboardNotification() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object: nil)
+    }
+    
+    @objc
+    func keyboardWillShow(notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            return
+        }
+        
+        let keyboardHeight = keyboardFrame.height
+        
+        let registrationButtonFrame = registrationButton.frame
+        let registrationButtonBottomY = registrationButtonFrame.origin.y + registrationButtonFrame.size.height
+        let screenHeight = UIScreen.main.bounds.size.height
+        if registrationButtonBottomY > screenHeight - keyboardHeight {
+            let contentOffsetY = registrationButtonBottomY - (screenHeight - keyboardHeight)
+            UIView.animate(withDuration: 0.3) {
+                self.view.frame.origin.y = -contentOffsetY
+            }
+        }
+    }
+        
+    @objc
+    func keyboardWillHide(notification: Notification) {
+        UIView.animate(withDuration: 0.3) {
+            self.view.frame.origin.y = self.originalContentOffset.y
+        }
+    }
+}
+
+//MARK: - Keyboard Hiding
+private extension RegistrationViewController {
+    func addTaps() {
+        let tapScreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        view.addGestureRecognizer(tapScreen)
+        
+        let swipeScreen = UISwipeGestureRecognizer(target: self, action: #selector(swipeKeyboard))
+        swipeScreen.cancelsTouchesInView = false
+        view.addGestureRecognizer(swipeScreen)
+    }
+    
+    @objc 
+    func hideKeyboard() {
+        view.endEditing(true)
+    }
+    
+    @objc 
+    func swipeKeyboard() {
+        view.endEditing(true)
+    }
+}
+
 //MARK: - Setup Layout
 private extension RegistrationViewController {
-    
     func setupLayout() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
