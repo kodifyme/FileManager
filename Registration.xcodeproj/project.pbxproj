@@ -9,23 +9,25 @@
 /* Begin PBXBuildFile section */
 		1241A29B2B7CB918006CEE16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A29A2B7CB918006CEE16 /* AppDelegate.swift */; };
 		1241A29D2B7CB918006CEE16 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A29C2B7CB918006CEE16 /* SceneDelegate.swift */; };
-		1241A29F2B7CB918006CEE16 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A29E2B7CB918006CEE16 /* ViewController.swift */; };
+		1241A29F2B7CB918006CEE16 /* RegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A29E2B7CB918006CEE16 /* RegistrationViewController.swift */; };
 		1241A2A42B7CB919006CEE16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1241A2A32B7CB919006CEE16 /* Assets.xcassets */; };
 		1241A2A72B7CB919006CEE16 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1241A2A52B7CB919006CEE16 /* LaunchScreen.storyboard */; };
 		1241A2B22B7CC689006CEE16 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B12B7CC689006CEE16 /* CustomTextField.swift */; };
 		1241A2B62B7CD923006CEE16 /* UILabel + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */; };
+		1241A2B82B7D3C80006CEE16 /* UIStackView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		1241A2972B7CB918006CEE16 /* Registration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Registration.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1241A29A2B7CB918006CEE16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1241A29C2B7CB918006CEE16 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		1241A29E2B7CB918006CEE16 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		1241A29E2B7CB918006CEE16 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
 		1241A2A32B7CB919006CEE16 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1241A2A62B7CB919006CEE16 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		1241A2A82B7CB919006CEE16 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1241A2B12B7CC689006CEE16 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Extensions.swift"; sourceTree = "<group>"; };
+		1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Extensions.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +91,7 @@
 		1241A2B02B7CBDB9006CEE16 /* ViewController */ = {
 			isa = PBXGroup;
 			children = (
-				1241A29E2B7CB918006CEE16 /* ViewController.swift */,
+				1241A29E2B7CB918006CEE16 /* RegistrationViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -106,6 +108,7 @@
 			isa = PBXGroup;
 			children = (
 				1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */,
+				1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -181,8 +184,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				1241A2B62B7CD923006CEE16 /* UILabel + Extensions.swift in Sources */,
+				1241A2B82B7D3C80006CEE16 /* UIStackView + Extensions.swift in Sources */,
 				1241A2B22B7CC689006CEE16 /* CustomTextField.swift in Sources */,
-				1241A29F2B7CB918006CEE16 /* ViewController.swift in Sources */,
+				1241A29F2B7CB918006CEE16 /* RegistrationViewController.swift in Sources */,
 				1241A29B2B7CB918006CEE16 /* AppDelegate.swift in Sources */,
 				1241A29D2B7CB918006CEE16 /* SceneDelegate.swift in Sources */,
 			);
