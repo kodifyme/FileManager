@@ -13,8 +13,10 @@ class RegistrationViewController: UIViewController {
     private let titleLabel = UILabel(text: "Регистрация",
                                      font: .systemFont(ofSize: 30))
     
-    private let nameTextField = CustomTextField(placeholder: "Имя")
-    private let numberTextField = CustomTextField(placeholder: "Номер телефона")
+    private let nameTextField = CustomTextField(placeholder: "Имя", 
+                                                keyBoardType: .default)
+    private let numberTextField = CustomTextField(placeholder: "Номер телефона", 
+                                                  keyBoardType: .numberPad)
     
     private var ageLabel = UILabel()
     
@@ -37,7 +39,8 @@ class RegistrationViewController: UIViewController {
         return segmentControl
     }()
     
-    private let noticeLabel = UILabel(text: "Получать уведомление по смс", font: .italicSystemFont(ofSize: 17))
+    private let noticeLabel = UILabel(text: "Получать уведомление по смс", 
+                                      font: .italicSystemFont(ofSize: 17))
     
     private let noticeSwitch: UISwitch = {
         let noticeSwitch = UISwitch()
@@ -56,7 +59,7 @@ class RegistrationViewController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -102,7 +105,9 @@ class RegistrationViewController: UIViewController {
 //MARK: - Embed Views
 private extension RegistrationViewController {
     func embedViews() {
-        ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))", font: .systemFont(ofSize: 18))
+        ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))", 
+                           font: .systemFont(ofSize: 18))
+        
         noticeStackView = UIStackView(arrangedSubviews: [noticeLabel, noticeSwitch],
                                       axis: .horizontal,
                                       spacing: 20)
@@ -128,7 +133,7 @@ extension RegistrationViewController: UITextFieldDelegate {
     }
 }
 
-//MARK: -
+//MARK: - Scrolling content
 private extension RegistrationViewController {
     var originalContentOffset: CGPoint {
         return CGPoint(x: 0, y: 0)
@@ -165,7 +170,7 @@ private extension RegistrationViewController {
             }
         }
     }
-        
+    
     @objc
     func keyboardWillHide(notification: Notification) {
         UIView.animate(withDuration: 0.3) {
@@ -185,12 +190,12 @@ private extension RegistrationViewController {
         view.addGestureRecognizer(swipeScreen)
     }
     
-    @objc 
+    @objc
     func hideKeyboard() {
         view.endEditing(true)
     }
     
-    @objc 
+    @objc
     func swipeKeyboard() {
         view.endEditing(true)
     }

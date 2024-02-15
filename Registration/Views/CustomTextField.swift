@@ -13,8 +13,9 @@ final class CustomTextField: UITextField {
     private let border = UIView()
     
     // MARK: - Initialization
-    init(placeholder: String) {
+    init(placeholder: String, keyBoardType: UIKeyboardType) {
         super.init(frame: .zero)
+        self.keyboardType = keyBoardType
         
         setupAppearance(placeholder: placeholder)
         setupLayout()
@@ -30,7 +31,6 @@ final class CustomTextField: UITextField {
         translatesAutoresizingMaskIntoConstraints = false
         
         border.backgroundColor = .gray
-        border.isUserInteractionEnabled = false
         border.translatesAutoresizingMaskIntoConstraints = false
         addSubview(border)
     }
