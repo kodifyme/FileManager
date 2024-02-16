@@ -57,6 +57,7 @@ class RegistrationViewController: UIViewController {
         return noticeSwitch
     }()
     
+    private var screenObjectsStackView = UIStackView()
     private var noticeStackView = UIStackView()
     
     private lazy var registrationButton: UIButton = {
@@ -76,7 +77,7 @@ class RegistrationViewController: UIViewController {
         embeddingViews()
         setupConstraints()
         setDelegate()
-        addTaps()
+        setupKeyboardDismissalGestures()
         registerKeyboardNotification()
     }
     
@@ -119,15 +120,20 @@ private extension RegistrationViewController {
         noticeStackView = UIStackView(arrangedSubviews: [noticeLabel, noticeSwitch],
                                       axis: .horizontal,
                                       spacing: 20)
+        
+        screenObjectsStackView = UIStackView(arrangedSubviews: [nameTextField,
+                                                                numberTextField,
+                                                                ageLabel,
+                                                                ageSlider,
+                                                                genderSegmentControl,
+                                                                noticeStackView],
+                                             axis: .vertical,
+                                             spacing: 40)
+        
         [
             titleLabel,
-            nameTextField,
-            numberTextField,
-            ageLabel,
-            ageSlider,
-            genderSegmentControl,
-            noticeStackView,
-            registrationButton
+            screenObjectsStackView,
+            registrationButton,
         ].forEach { view.addSubview($0) }
     }
 }
@@ -189,7 +195,7 @@ private extension RegistrationViewController {
 
 //MARK: - Keyboard Hiding
 private extension RegistrationViewController {
-    func addTaps() {
+    func setupKeyboardDismissalGestures() {
         //UITapGestureRecognizer
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
         
@@ -214,37 +220,15 @@ private extension RegistrationViewController {
 //MARK: - Setup Constraints
 private extension RegistrationViewController {
     func setupConstraints() {
-        NSLayoutConstraint.activate([   //stackview?
+        NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             
-            nameTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
-            nameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            nameTextField.heightAnchor.constraint(equalToConstant: 45),
+            screenObjectsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            screenObjectsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            screenObjectsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            numberTextField.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 25),
-            numberTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            numberTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            numberTextField.heightAnchor.constraint(equalToConstant: 45),
-            
-            ageLabel.topAnchor.constraint(equalTo: numberTextField.bottomAnchor, constant: 30),
-            ageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            
-            ageSlider.topAnchor.constraint(equalTo: ageLabel.bottomAnchor, constant: 15),
-            ageSlider.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            ageSlider.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            genderSegmentControl.topAnchor.constraint(equalTo: ageSlider.bottomAnchor, constant: 25),
-            genderSegmentControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            genderSegmentControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            genderSegmentControl.heightAnchor.constraint(equalToConstant: 40),
-            
-            noticeStackView.topAnchor.constraint(equalTo: genderSegmentControl.bottomAnchor, constant: 30),
-            noticeStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            noticeStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            
-            registrationButton.topAnchor.constraint(equalTo: noticeStackView.bottomAnchor, constant: 60),
+            registrationButton.topAnchor.constraint(equalTo: screenObjectsStackView.bottomAnchor, constant: 40),
             registrationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
