@@ -10,15 +10,22 @@ import UIKit
 final class CustomTextField: UITextField {
     
     // MARK: - Subviews
-    private let border = UIView()
+    private let border: UIView = {
+        let view = UIView()
+        view.backgroundColor = .gray
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     // MARK: - Initialization
     init(placeholder: String, keyBoardType: UIKeyboardType) {
         super.init(frame: .zero)
         self.keyboardType = keyBoardType
+        self.placeholder = placeholder
+        translatesAutoresizingMaskIntoConstraints = false
         
-        setupAppearance(placeholder: placeholder)
-        setupLayout()
+        embeddingViews()
+        configureBorderConstraints()
     }
     
     required init?(coder: NSCoder) {
@@ -26,12 +33,7 @@ final class CustomTextField: UITextField {
     }
     
     // MARK: - Private Methods
-    private func setupAppearance(placeholder: String) {
-        self.placeholder = placeholder
-        translatesAutoresizingMaskIntoConstraints = false
-        
-        border.backgroundColor = .gray
-        border.translatesAutoresizingMaskIntoConstraints = false
+    private func embeddingViews() {
         addSubview(border)
     }
     
@@ -40,9 +42,9 @@ final class CustomTextField: UITextField {
     }
 }
 
-//MARK: - Setup Layout
+//MARK: - Configure Border Constraints
 private extension CustomTextField {
-    func setupLayout() {
+    func configureBorderConstraints() {
         NSLayoutConstraint.activate([
             border.leadingAnchor.constraint(equalTo: leadingAnchor),
             border.trailingAnchor.constraint(equalTo: trailingAnchor),

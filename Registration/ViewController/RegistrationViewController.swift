@@ -9,6 +9,15 @@ import UIKit
 
 class RegistrationViewController: UIViewController {
     
+    // hw
+    // 1. validation
+    // 2. mvc (view (with subviews) in vc)
+    
+    // q
+    // inheritance
+    // uiview
+    // UIViewController
+    
     // MARK: - Subviews
     private let titleLabel = UILabel(text: "Регистрация",
                                      font: .systemFont(ofSize: 30))
@@ -55,7 +64,7 @@ class RegistrationViewController: UIViewController {
         button.setTitle("Зарегистрироваться", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 19)
-        button.addTarget(self, action: #selector(didTap), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleRegistrationButtonTap), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -64,8 +73,8 @@ class RegistrationViewController: UIViewController {
         super.viewDidLoad()
         
         setupAppearance()
-        embedViews()
-        setupLayout()
+        embeddingViews()
+        setupConstraints()
         setDelegate()
         addTaps()
         registerKeyboardNotification()
@@ -84,12 +93,11 @@ class RegistrationViewController: UIViewController {
     
     @objc
     private func sliderValueChanged() {
-        let ageValue = Int(ageSlider.value)
-        ageLabel.text = "Возраст: \(ageValue)"
+        ageLabel.text = "Возраст: \(Int(ageSlider.value))"
     }
     
     @objc
-    private func didTap() {
+    private func handleRegistrationButtonTap() {
         nameTextField.setBorderColor(nameTextField.text?.isEmpty ?? true ? .red : .gray)
         numberTextField.setBorderColor(numberTextField.text?.isEmpty ?? true ? .red : .gray)
         
@@ -102,10 +110,10 @@ class RegistrationViewController: UIViewController {
     }
 }
 
-//MARK: - Embed Views
+//MARK: - Embedding Views
 private extension RegistrationViewController {
-    func embedViews() {
-        ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))", 
+    func embeddingViews() {
+        ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))",
                            font: .systemFont(ofSize: 18))
         
         noticeStackView = UIStackView(arrangedSubviews: [noticeLabel, noticeSwitch],
@@ -136,7 +144,7 @@ extension RegistrationViewController: UITextFieldDelegate {
 //MARK: - Scrolling content
 private extension RegistrationViewController {
     var originalContentOffset: CGPoint {
-        return CGPoint(x: 0, y: 0)
+        CGPoint(x: 0, y: 0)
     }
     
     func registerKeyboardNotification() {
@@ -182,11 +190,13 @@ private extension RegistrationViewController {
 //MARK: - Keyboard Hiding
 private extension RegistrationViewController {
     func addTaps() {
-        let tapScreen = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        view.addGestureRecognizer(tapScreen)
+        //UITapGestureRecognizer
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
         
+        //UISwipeGestureRecognizer
         let swipeScreen = UISwipeGestureRecognizer(target: self, action: #selector(swipeKeyboard))
         swipeScreen.cancelsTouchesInView = false
+        swipeScreen.direction = [.left, .right]
         view.addGestureRecognizer(swipeScreen)
     }
     
@@ -201,10 +211,10 @@ private extension RegistrationViewController {
     }
 }
 
-//MARK: - Setup Layout
+//MARK: - Setup Constraints
 private extension RegistrationViewController {
-    func setupLayout() {
-        NSLayoutConstraint.activate([
+    func setupConstraints() {
+        NSLayoutConstraint.activate([   //stackview?
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             
@@ -239,3 +249,4 @@ private extension RegistrationViewController {
         ])
     }
 }
+
