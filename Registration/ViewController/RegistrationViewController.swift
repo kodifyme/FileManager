@@ -105,17 +105,17 @@ class RegistrationViewController: UIViewController {
     
     @objc
     private func handleRegistrationButtonTap() {
-        
         nameTextField.setBorderColor(nameTextField.isValid ? .systemGreen : .red)
         numberTextField.setBorderColor(numberTextField.isValid ? .systemGreen : .red)
         passwordTextField.setBorderColor(passwordTextField.isValid ? .systemGreen : .red)
         
         guard let userName = nameTextField.text,
-                !userName.isEmpty && userName.isValid(validType: .name),
               let phoneNumber = numberTextField.text,
-                !phoneNumber.isEmpty && phoneNumber.isValid(validType: .phoneNumber),
               let userPassword = passwordTextField.text,
-                !userPassword.isEmpty && userPassword.isValid(validType: .password) else {
+              !userName.isEmpty, !phoneNumber.isEmpty, !userPassword.isEmpty,
+              userName.isValid(validType: .name),
+              phoneNumber.isValid(validType: .phoneNumber),
+              userPassword.isValid(validType: .password) else {
             return
         }
         

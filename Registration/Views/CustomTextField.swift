@@ -19,6 +19,7 @@ final class CustomTextField: UITextField {
     // MARK: - Subviews
     private let border: UIView = {
         let view = UIView()
+        view.backgroundColor = .gray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
