@@ -9,10 +9,16 @@ import UIKit
 
 final class CustomTextField: UITextField {
     
+    //MARK: - Properties
+    var isValid: Bool = false {
+        didSet {
+            border.backgroundColor = isValid ? .systemGreen : .red
+        }
+    }
+    
     // MARK: - Subviews
     private let border: UIView = {
         let view = UIView()
-        view.backgroundColor = .gray
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -39,6 +45,28 @@ final class CustomTextField: UITextField {
     
     func setBorderColor(_ color: UIColor) {
         border.backgroundColor = color
+    }
+    
+    func setTextField(textField: UITextField, validType: String.ValidTypes, validMessage: String, wrongMessage: String, string: String, range: NSRange) {
+        let text = (textField.text ?? "") + string
+        let result: String
+        
+        if range.length == 1 {
+            let end = text.index(text.startIndex, offsetBy: text.count - 1)
+            result = String(text[text.startIndex..<end])
+        } else {
+            result = text
+        }
+        
+        textField.text = result
+        
+        isValid = result.isValid(validType: validType)
+        
+        if isValid {
+            print(validMessage)
+        } else {
+            print(wrongMessage)
+        }
     }
 }
 

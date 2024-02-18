@@ -18,15 +18,19 @@ class RegistrationViewController: UIViewController {
     // uiview
     // UIViewController
     
+    //MARK: - Properties
+    var isFirstTime = true
+    
     // MARK: - Subviews
     private let titleLabel = UILabel(text: "Регистрация",
                                      font: .systemFont(ofSize: 30))
     
-    private let nameTextField = CustomTextField(placeholder: "Имя", 
+    private let nameTextField = CustomTextField(placeholder: "Имя",
                                                 keyBoardType: .default)
-    private let numberTextField = CustomTextField(placeholder: "Номер телефона", 
-                                                  keyBoardType: .numberPad)
-    private let passwordTextField = CustomTextField(placeholder: "Пароль", keyBoardType: .default)
+    private let numberTextField = CustomTextField(placeholder: "Номер телефона в формате +7",
+                                                  keyBoardType: .phonePad)
+    private let passwordTextField = CustomTextField(placeholder: "Пароль",
+                                                    keyBoardType: .default)
     
     private var ageLabel = UILabel()
     
@@ -49,7 +53,7 @@ class RegistrationViewController: UIViewController {
         return segmentControl
     }()
     
-    private let noticeLabel = UILabel(text: "Получать уведомление по смс", 
+    private let noticeLabel = UILabel(text: "Получать уведомление по смс",
                                       font: .italicSystemFont(ofSize: 17))
     
     private let noticeSwitch: UISwitch = {
@@ -91,6 +95,7 @@ class RegistrationViewController: UIViewController {
     private func setDelegate() {
         nameTextField.delegate = self
         numberTextField.delegate = self
+        passwordTextField.delegate = self
     }
     
     @objc
@@ -100,13 +105,17 @@ class RegistrationViewController: UIViewController {
     
     @objc
     private func handleRegistrationButtonTap() {
-        nameTextField.setBorderColor(nameTextField.text?.isEmpty ?? true ? .red : .gray)
-        numberTextField.setBorderColor(numberTextField.text?.isEmpty ?? true ? .red : .gray)
-        passwordTextField.setBorderColor(passwordTextField.text?.isEmpty ?? true ? .red : .gray)
         
-        guard let userName = nameTextField.text, !userName.isEmpty,
-              let phoneNumber = numberTextField.text, !phoneNumber.isEmpty,
-              let userPassword = passwordTextField.text , !userPassword.isEmpty else {
+        nameTextField.setBorderColor(nameTextField.isValid ? .systemGreen : .red)
+        numberTextField.setBorderColor(numberTextField.isValid ? .systemGreen : .red)
+        passwordTextField.setBorderColor(passwordTextField.isValid ? .systemGreen : .red)
+        
+        guard let userName = nameTextField.text,
+                !userName.isEmpty && userName.isValid(validType: .name),
+              let phoneNumber = numberTextField.text,
+                !phoneNumber.isEmpty && phoneNumber.isValid(validType: .phoneNumber),
+              let userPassword = passwordTextField.text,
+                !userPassword.isEmpty && userPassword.isValid(validType: .password) else {
             return
         }
         
@@ -143,6 +152,39 @@ private extension RegistrationViewController {
 
 //MARK: - UITextFieldDelegate
 extension RegistrationViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        
+        switch textField {
+        case nameTextField:
+            nameTextField.setTextField(textField: nameTextField,
+                                       validType: .name,
+                                       validMessage: "Name is valid",
+                                       wrongMessage: "Only A-Z characters annd min 1 character",
+                                       string: string,
+                                       range: range)
+            
+        case numberTextField:
+            numberTextField.setTextField(textField: numberTextField,
+                                         validType: .phoneNumber,
+                                         validMessage: "Phone is valid",
+                                         wrongMessage: "-",
+                                         string: string,
+                                         range: range)
+            
+        case passwordTextField:
+            passwordTextField.setTextField(textField: passwordTextField,
+                                           validType: .password,
+                                           validMessage: "Password is valid",
+                                           wrongMessage: "Password is not valid",
+                                           string: string,
+                                           range: range)
+        default:
+            break
+        }
+        
+        return false
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         nameTextField.resignFirstResponder()
         numberTextField.resignFirstResponder()
