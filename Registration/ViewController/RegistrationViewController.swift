@@ -26,6 +26,7 @@ class RegistrationViewController: UIViewController {
                                                 keyBoardType: .default)
     private let numberTextField = CustomTextField(placeholder: "Номер телефона", 
                                                   keyBoardType: .numberPad)
+    private let passwordTextField = CustomTextField(placeholder: "Пароль", keyBoardType: .default)
     
     private var ageLabel = UILabel()
     
@@ -101,9 +102,11 @@ class RegistrationViewController: UIViewController {
     private func handleRegistrationButtonTap() {
         nameTextField.setBorderColor(nameTextField.text?.isEmpty ?? true ? .red : .gray)
         numberTextField.setBorderColor(numberTextField.text?.isEmpty ?? true ? .red : .gray)
+        passwordTextField.setBorderColor(passwordTextField.text?.isEmpty ?? true ? .red : .gray)
         
         guard let userName = nameTextField.text, !userName.isEmpty,
-              let phoneNumber = numberTextField.text, !phoneNumber.isEmpty else {
+              let phoneNumber = numberTextField.text, !phoneNumber.isEmpty,
+              let userPassword = passwordTextField.text , !userPassword.isEmpty else {
             return
         }
         
@@ -123,17 +126,17 @@ private extension RegistrationViewController {
         
         screenObjectsStackView = UIStackView(arrangedSubviews: [nameTextField,
                                                                 numberTextField,
+                                                                passwordTextField,
                                                                 ageLabel,
                                                                 ageSlider,
                                                                 genderSegmentControl,
                                                                 noticeStackView],
                                              axis: .vertical,
-                                             spacing: 40)
+                                             spacing: 30)
         
-        [
-            titleLabel,
-            screenObjectsStackView,
-            registrationButton,
+        [titleLabel,
+         screenObjectsStackView,
+         registrationButton
         ].forEach { view.addSubview($0) }
     }
 }
@@ -143,6 +146,7 @@ extension RegistrationViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         nameTextField.resignFirstResponder()
         numberTextField.resignFirstResponder()
+        passwordTextField.resignFirstResponder()
         return true
     }
 }
@@ -224,7 +228,7 @@ private extension RegistrationViewController {
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             
-            screenObjectsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 30),
+            screenObjectsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
             screenObjectsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             screenObjectsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
