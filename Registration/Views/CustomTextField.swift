@@ -16,7 +16,7 @@ final class CustomTextField: UITextField {
         }
     }
     
-    // MARK: - Subviews
+    //MARK: - Subviews
     private let border: UIView = {
         let view = UIView()
         view.backgroundColor = .gray
@@ -24,7 +24,7 @@ final class CustomTextField: UITextField {
         return view
     }()
     
-    // MARK: - Initialization
+    //MARK: - Initialization
     init(placeholder: String, keyBoardType: UIKeyboardType) {
         super.init(frame: .zero)
         self.keyboardType = keyBoardType
@@ -39,7 +39,7 @@ final class CustomTextField: UITextField {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Private Methods
+    //MARK: - Private Methods
     private func embeddingViews() {
         addSubview(border)
     }

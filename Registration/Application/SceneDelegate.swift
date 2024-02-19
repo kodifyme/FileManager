@@ -16,8 +16,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = RegistrationViewController()
+        window?.rootViewController = createRegistrationNC()
         window?.makeKeyAndVisible()
+    }
+    
+    func createRegistrationNC() -> UINavigationController {
+        let registrationVC = RegistrationViewController()
+        registrationVC.title = "Регистрация"
+        return UINavigationController(rootViewController: registrationVC)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

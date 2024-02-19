@@ -21,7 +21,8 @@ class RegistrationViewController: UIViewController {
     //MARK: - Properties
     var isFirstTime = true
     
-    // MARK: - Subviews
+    
+    //MARK: - Subviews
     private let titleLabel = UILabel(text: "Регистрация",
                                      font: .systemFont(ofSize: 30))
     
@@ -75,6 +76,17 @@ class RegistrationViewController: UIViewController {
         return button
     }()
     
+    private lazy var skipButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("Пропустить", for: .normal)
+        button.setTitleColor(.systemBlue, for: .disabled)
+        button.titleLabel?.font = .systemFont(ofSize: 19)
+        button.configuration = .plain()
+        button.addTarget(self, action: #selector(handleSkipButtonTap), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -86,12 +98,18 @@ class RegistrationViewController: UIViewController {
         registerKeyboardNotification()
     }
     
-    // MARK: - Private Methods
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationController?.navigationBar.isHidden = true
+    }
+    
+    //MARK: - Private Methods
     private func setupAppearance() {
         view.backgroundColor = .white
     }
     
-    // MARK: - Set Delegate
+    //MARK: - Set Delegate
     private func setDelegate() {
         nameTextField.delegate = self
         numberTextField.delegate = self
@@ -119,7 +137,15 @@ class RegistrationViewController: UIViewController {
             return
         }
         
+        handleSkipButtonTap()
         print("Имя: \(userName), \nНомер телефона: \(phoneNumber), \nВозраст: \(Int(ageSlider.value)), \nПол: \(genderSegmentControl.titleForSegment(at: genderSegmentControl.selectedSegmentIndex) ?? "")")
+    }
+    
+    @objc
+    private func handleSkipButtonTap() {
+        let vc = AuthorizationViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        view.endEditing(true)
     }
 }
 
@@ -145,7 +171,8 @@ private extension RegistrationViewController {
         
         [titleLabel,
          screenObjectsStackView,
-         registrationButton
+         registrationButton,
+         skipButton
         ].forEach { view.addSubview($0) }
     }
 }
@@ -268,14 +295,17 @@ private extension RegistrationViewController {
     func setupConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             
             screenObjectsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
             screenObjectsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             screenObjectsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
             registrationButton.topAnchor.constraint(equalTo: screenObjectsStackView.bottomAnchor, constant: 40),
-            registrationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            registrationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            skipButton.topAnchor.constraint(equalTo: registrationButton.bottomAnchor, constant: 30),
+            skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 }
