@@ -16,6 +16,7 @@
 		1241A2B62B7CD923006CEE16 /* UILabel + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */; };
 		1241A2B82B7D3C80006CEE16 /* UIStackView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */; };
 		126D75DB2B7FE45000DA01FF /* String + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126D75DA2B7FE45000DA01FF /* String + Extensions.swift */; };
+		12ADF8862B850FDC0068E2A3 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ADF8852B850FDC0068E2A3 /* UserDefaultsManager.swift */; };
 		12E989A72B83584C008919D8 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E989A62B83584C008919D8 /* AuthorizationViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +32,7 @@
 		1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Extensions.swift"; sourceTree = "<group>"; };
 		1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Extensions.swift"; sourceTree = "<group>"; };
 		126D75DA2B7FE45000DA01FF /* String + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extensions.swift"; sourceTree = "<group>"; };
+		12ADF8852B850FDC0068E2A3 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		12E989A62B83584C008919D8 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -65,6 +67,7 @@
 			isa = PBXGroup;
 			children = (
 				1241A2AF2B7CBDA8006CEE16 /* Application */,
+				12ADF8842B850F630068E2A3 /* Services */,
 				1241A2B02B7CBDB9006CEE16 /* ViewController */,
 				1241A2B32B7CC69A006CEE16 /* Views */,
 				1241A2B42B7CD90E006CEE16 /* Extensions */,
@@ -117,6 +120,14 @@
 				126D75DA2B7FE45000DA01FF /* String + Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		12ADF8842B850F630068E2A3 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				12ADF8852B850FDC0068E2A3 /* UserDefaultsManager.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -194,6 +205,7 @@
 				1241A2B22B7CC689006CEE16 /* CustomTextField.swift in Sources */,
 				1241A29F2B7CB918006CEE16 /* RegistrationViewController.swift in Sources */,
 				12E989A72B83584C008919D8 /* AuthorizationViewController.swift in Sources */,
+				12ADF8862B850FDC0068E2A3 /* UserDefaultsManager.swift in Sources */,
 				1241A29B2B7CB918006CEE16 /* AppDelegate.swift in Sources */,
 				1241A29D2B7CB918006CEE16 /* SceneDelegate.swift in Sources */,
 				126D75DB2B7FE45000DA01FF /* String + Extensions.swift in Sources */,

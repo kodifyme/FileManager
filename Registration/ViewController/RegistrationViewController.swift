@@ -137,13 +137,18 @@ class RegistrationViewController: UIViewController {
             return
         }
         
+        UserDefaultsManager.shared.saveLoginCredintails(login: userName, password: userPassword)
+        
         handleSkipButtonTap()
+        
         print("Имя: \(userName), \nНомер телефона: \(phoneNumber), \nВозраст: \(Int(ageSlider.value)), \nПол: \(genderSegmentControl.titleForSegment(at: genderSegmentControl.selectedSegmentIndex) ?? "")")
     }
     
     @objc
     private func handleSkipButtonTap() {
         let vc = AuthorizationViewController()
+        vc.title = "Авторизация"
+        navigationController?.navigationBar.prefersLargeTitles = true
         navigationController?.pushViewController(vc, animated: true)
         view.endEditing(true)
     }
