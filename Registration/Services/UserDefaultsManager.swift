@@ -15,6 +15,7 @@ struct  UserDefaultsManager {
     func saveLoginCredintails(login: String, password: String) {
         defaults.set(login, forKey: "login")
         defaults.set(password, forKey: "password")
+        defaults.set(true, forKey: "isLoggedIn")
     }
     
     func getLogin() -> String? {
@@ -23,5 +24,9 @@ struct  UserDefaultsManager {
     
     func getPassword() -> String? {
         defaults.string(forKey: "password")
+    }
+    
+    func isLoggedIn() -> Bool {
+        defaults.bool(forKey: "isLoggedIn")
     }
 }

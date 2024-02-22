@@ -38,14 +38,20 @@ class AuthorizationViewController: UIViewController {
     private func setupAppearance() {
         view.backgroundColor = .white
         navigationController?.navigationBar.isHidden = false
-        
-        loginTextField.text = UserDefaultsManager.shared.getLogin()
-        passwordTextField.text = UserDefaultsManager.shared.getPassword()
     }
     
     @objc
     private func handleLoginButtonTap() {
+        guard let login = loginTextField.text,
+              let password = passwordTextField.text,
+              UserDefaultsManager.shared.getLogin() == login,
+              UserDefaultsManager.shared.getPassword() == password else {
+            print("Неверные данные")
+            return
+        }
         
+        let fileSystemVC = FileSystemViewController()
+        navigationController?.pushViewController(fileSystemVC, animated: true)
     }
 }
 

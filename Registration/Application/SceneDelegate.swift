@@ -16,9 +16,41 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = createRegistrationNC()
-        window?.makeKeyAndVisible()
+        
+        if UserDefaultsManager.shared.isLoggedIn() {
+            let navigationVC = UINavigationController()
+            
+            // Создание экрана файловой системы
+            let fileSystemVC = FileSystemViewController()
+            fileSystemVC.title = "Файловая система" // Устанавливаем заголовок для экрана файловой системы
+            
+            // Создание экранов регистрации и авторизации
+            let registrationVC = RegistrationViewController()
+            registrationVC.title = "Регистрация" // Устанавливаем заголовок для экрана регистрации
+            let authorizationVC = AuthorizationViewController()
+            authorizationVC.title = "Авторизация"
+
+            
+            // Добавление экранов в стек навигации
+            navigationVC.setViewControllers([registrationVC, authorizationVC, fileSystemVC], animated: false)
+            // Устанавливаем навигационный контроллер как корневой для окна
+            window?.rootViewController = navigationVC
+            window?.makeKeyAndVisible()
+        } else {
+            // Создание экрана регистрации
+            let registrationVC = RegistrationViewController()
+            registrationVC.title = "Регистрация" // Устанавливаем заголовок для экрана регистрации
+            
+            // Создание навигационного контроллера с экраном регистрации в качестве корневого
+            let registrationNC = UINavigationController(rootViewController: registrationVC)
+            
+            // Устанавливаем навигационный контроллер с экраном регистрации как корневой для окна
+            window?.rootViewController = registrationNC
+            window?.makeKeyAndVisible()
+        }
     }
+    
+    func 
     
     func createRegistrationNC() -> UINavigationController {
         let registrationVC = RegistrationViewController()
