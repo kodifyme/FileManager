@@ -20,42 +20,28 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         if UserDefaultsManager.shared.isLoggedIn() {
             let navigationVC = UINavigationController()
             
-            // Создание экрана файловой системы
             let fileSystemVC = FileSystemViewController()
-            fileSystemVC.title = "Файловая система" // Устанавливаем заголовок для экрана файловой системы
+            fileSystemVC.title = "Файловая система"
             
-            // Создание экранов регистрации и авторизации
             let registrationVC = RegistrationViewController()
-            registrationVC.title = "Регистрация" // Устанавливаем заголовок для экрана регистрации
+            registrationVC.title = "Регистрация"
+            
             let authorizationVC = AuthorizationViewController()
             authorizationVC.title = "Авторизация"
 
-            
-            // Добавление экранов в стек навигации
             navigationVC.setViewControllers([registrationVC, authorizationVC, fileSystemVC], animated: false)
-            // Устанавливаем навигационный контроллер как корневой для окна
+
             window?.rootViewController = navigationVC
             window?.makeKeyAndVisible()
         } else {
-            // Создание экрана регистрации
             let registrationVC = RegistrationViewController()
-            registrationVC.title = "Регистрация" // Устанавливаем заголовок для экрана регистрации
+            registrationVC.title = "Регистрация"
             
-            // Создание навигационного контроллера с экраном регистрации в качестве корневого
             let registrationNC = UINavigationController(rootViewController: registrationVC)
             
-            // Устанавливаем навигационный контроллер с экраном регистрации как корневой для окна
             window?.rootViewController = registrationNC
             window?.makeKeyAndVisible()
         }
-    }
-    
-    func 
-    
-    func createRegistrationNC() -> UINavigationController {
-        let registrationVC = RegistrationViewController()
-        registrationVC.title = "Регистрация"
-        return UINavigationController(rootViewController: registrationVC)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
