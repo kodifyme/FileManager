@@ -102,6 +102,13 @@ class RegistrationViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.isHidden = true
+        nameTextField.text = nil
+        numberTextField.text = nil
+        passwordTextField.text = nil
+        
+        nameTextField.setBorderColor(.gray)
+        numberTextField.setBorderColor(.gray)
+        passwordTextField.setBorderColor(.gray)
     }
     
     //MARK: - Private Methods

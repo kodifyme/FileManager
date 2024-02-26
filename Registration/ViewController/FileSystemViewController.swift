@@ -36,6 +36,8 @@ class FileSystemViewController: UITableViewController {
             UIBarButtonItem(image: UIImage(named: "AddFolder"), style: .done, target: self, action: #selector(addFolderButtonTapped)),
             UIBarButtonItem(image: UIImage(named: "AddFile"), style: .done, target: self, action: #selector(addFileButtonTapped))
         ]
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
     }
     
     private func showRootDirectoryContents() {
@@ -64,6 +66,12 @@ class FileSystemViewController: UITableViewController {
         let newFileURL = directory.appendingPathComponent(newFileName)
         fileManager.createFile(atPath: newFileURL.path, contents: nil, attributes: nil)
         loadContents()
+    }
+    
+    @objc
+    private func logoutButtonTapped() {
+        UserDefaultsManager.shared.removeLoggedInStatus()
+        navigationController?.popToRootViewController(animated: true)
     }
 }
 

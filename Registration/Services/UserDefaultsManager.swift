@@ -29,4 +29,8 @@ struct  UserDefaultsManager {
     func isLoggedIn() -> Bool {
         defaults.bool(forKey: "isLoggedIn")
     }
+    
+    func removeLoggedInStatus() {
+        defaults.removeObject(forKey: "isLoggedIn")
+    }
 }
