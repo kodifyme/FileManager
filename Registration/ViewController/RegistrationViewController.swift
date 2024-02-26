@@ -148,7 +148,7 @@ class RegistrationViewController: UIViewController {
     private func handleSkipButtonTap() {
         let vc = AuthorizationViewController()
         vc.title = "Авторизация"
-        navigationController?.navigationBar.prefersLargeTitles = true
+        
         navigationController?.pushViewController(vc, animated: true)
         view.endEditing(true)
     }

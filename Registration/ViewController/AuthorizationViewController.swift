@@ -10,7 +10,6 @@ import UIKit
 class AuthorizationViewController: UIViewController {
     
     //MARK: - Subviews
-    
     private let loginTextField = CustomTextField(placeholder: "Логин", keyBoardType: .default)
     private let passwordTextField = CustomTextField(placeholder: "Пароль", keyBoardType: .default)
     
