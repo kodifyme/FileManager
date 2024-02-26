@@ -35,4 +35,17 @@ extension String {
         }
         return NSPredicate(format: format, regex).evaluate(with: self)
     }
+    
+    //MARK: - Random Text
+    func generateRandomText() -> String {
+        let words = ["Lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit"]
+        
+        var randomText = ""
+        for _ in 0..<10 {
+            let randomIndex = Int.random(in: 0..<words.count)
+            let word = words[randomIndex]
+            randomText += word + " "
+        }
+        return randomText
+    }
 }

@@ -50,6 +50,8 @@ class AuthorizationViewController: UIViewController {
         }
         
         let fileSystemVC = FileSystemViewController()
+        fileSystemVC.title = "Фаловая система"
+        navigationController?.navigationBar.prefersLargeTitles = true 
         navigationController?.pushViewController(fileSystemVC, animated: true)
     }
 }
