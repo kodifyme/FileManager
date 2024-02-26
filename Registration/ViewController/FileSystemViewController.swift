@@ -21,31 +21,6 @@ class FileSystemViewController: UITableViewController {
         showRootDirectoryContents()
     }
     
-    func showRootDirectoryContents() {
-        currentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        loadContents()
-    }
-    
-    func loadContents() {
-        guard let directory = currentDirectory else { return }
-        do {
-            contents = try fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil).sorted(by: { $0.lastPathComponent < $1.lastPathComponent })
-            tableView.reloadData()
-        } catch {
-            print("Error loading contents: \(error.localizedDescription)")
-        }
-    }
-    
-    func uniqueName(for baseName: String, in directory: URL) -> String {
-        var name = baseName
-        var count = 1
-        while fileManager.fileExists(atPath: directory.appendingPathComponent(name).path) {
-            count += 1
-            name = "\(baseName) \(count)"
-        }
-        return name
-    }
-    
     //MARK: - Private Methods
     private func setupTableView() {
         self.tableView = UITableView(frame: .zero, style: .insetGrouped)
@@ -63,18 +38,10 @@ class FileSystemViewController: UITableViewController {
         ]
     }
     
-    func showFileContent(at url: URL) {
-        do {
-            _ = try String(contentsOf: url)
-            let alertController = UIAlertController(title: url.lastPathComponent,
-                                                    message: String().generateRandomText(),
-                                                    preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            present(alertController, animated: true, completion: nil)
-        } catch {
-            print("Error reading file content: \(error)")
-        }
-    }
+    private func showRootDirectoryContents() {
+         currentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+         loadContents()
+     }
     
     //MARK: - Creat Folders and Files
     @objc
@@ -98,8 +65,45 @@ class FileSystemViewController: UITableViewController {
         fileManager.createFile(atPath: newFileURL.path, contents: nil, attributes: nil)
         loadContents()
     }
+}
+
+private extension FileSystemViewController {
+    //MARK: - Directory contents
+    func loadContents() {
+         guard let directory = currentDirectory else { return }
+         do {
+             contents = try fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
+             .sorted(by: { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending })
+             tableView.reloadData()
+         } catch {
+             print("Error loading contents: \(error.localizedDescription)")
+         }
+     }
     
-    //MARK: - UITableViewDataSource
+    //MARK: - Generate unique name
+    func uniqueName(for baseName: String, in directory: URL) -> String {
+        var name = baseName
+        var count = 1
+        let allFiles = try? fileManager.contentsOfDirectory(atPath: directory.path)
+        while allFiles?.contains("\(name)") ?? false {
+            count += 1
+            name = "\(baseName) \(count)"
+        }
+        return name
+    }
+    
+    //MARK: - Alert
+    func showFileContent(at url: URL) {
+        let alertController = UIAlertController(title: url.lastPathComponent,
+                                                message: String().generateRandomText(),
+                                                preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        present(alertController, animated: true, completion: nil)
+    }
+}
+
+//MARK: - UITableViewDataSource
+extension FileSystemViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         contents.count
     }
@@ -110,8 +114,10 @@ class FileSystemViewController: UITableViewController {
         cell.textLabel?.text = item.lastPathComponent
         return cell
     }
-    
-    //MARK: - UITableViewDelegate
+}
+
+//MARK: - UITableViewDelegate
+extension FileSystemViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
@@ -136,5 +142,3 @@ class FileSystemViewController: UITableViewController {
         }
     }
 }
-
-
