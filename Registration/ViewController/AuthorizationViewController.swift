@@ -52,7 +52,9 @@ class AuthorizationViewController: UIViewController {
               let password = passwordTextField.text,
               UserDefaultsManager.shared.getLogin() == login,
               UserDefaultsManager.shared.getPassword() == password else {
-            print("Неверные данные")
+            let alertController = UIAlertController(title: "Неверные данные", message: nil, preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "Ok", style: .cancel))
+            present(alertController, animated: true)
             return
         }
         navigationController?.pushViewController(FileSystemViewController(), animated: true)

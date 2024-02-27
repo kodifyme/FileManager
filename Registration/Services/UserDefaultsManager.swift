@@ -10,29 +10,34 @@ import Foundation
 struct  UserDefaultsManager {
     
     static let shared = UserDefaultsManager()
-    private init() { }  //!
+    
+    private init() { }
     
     private let defaults = UserDefaults.standard
     
+    private let loginKey = "login"
+    private let passwordKey = "password"
+    private let isLoggedInKey = "isLoggedIn"
+    
     func saveLoginCredintails(login: String, password: String) {
-        defaults.set(login, forKey: "login")    //constants!
-        defaults.set(password, forKey: "password")
-        defaults.set(true, forKey: "isLoggedIn")
+        defaults.set(login, forKey: loginKey)
+        defaults.set(password, forKey: passwordKey)
+        defaults.set(true, forKey: isLoggedInKey)
     }
     
     func getLogin() -> String? {
-        defaults.string(forKey: "login")
+        defaults.string(forKey: loginKey)
     }
     
     func getPassword() -> String? {
-        defaults.string(forKey: "password")
+        defaults.string(forKey: passwordKey)
     }
     
     func isLoggedIn() -> Bool {
-        defaults.bool(forKey: "isLoggedIn")
+        defaults.bool(forKey: isLoggedInKey)
     }
     
     func removeLoggedInStatus() {
-        defaults.removeObject(forKey: "isLoggedIn")
+        defaults.removeObject(forKey: isLoggedInKey)
     }
 }

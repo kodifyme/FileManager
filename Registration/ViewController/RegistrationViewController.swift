@@ -12,7 +12,7 @@ class RegistrationViewController: UIViewController {
     // hw
     // 1. mvc (view (with subviews) in vc)
     // 2. validation: 8(***), Capitalized name, hide password, Capitalization
-    // 3. wrong pass alert
+// 3. wrong pass alert
     // 4. nvc, vc builder
     // 5. FileManager Manager
     // 6. animation cell updates
