@@ -27,7 +27,7 @@ class RegistrationViewController: UIViewController {
     
     private let nameTextField = CustomTextField(placeholder: "Имя",
                                                 keyBoardType: .default)
-    private let numberTextField = CustomTextField(placeholder: "Номер телефона в формате +7",
+    private let numberTextField = CustomTextField(placeholder: "Номер телефона",
                                                   keyBoardType: .phonePad)
     private let passwordTextField = CustomTextField(placeholder: "Пароль",
                                                     keyBoardType: .default)

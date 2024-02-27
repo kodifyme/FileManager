@@ -17,7 +17,7 @@ extension String {
     
     enum Regex: String {
         case name = "[a-zA-Z]{1,}"
-        case phoneNumber = "^\\+7\\d{10}$"
+        case phoneNumber = "^(\\+7|8)\\d{10}$"
         case password = "(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).{6,}"
     }
     
@@ -42,9 +42,7 @@ extension String {
         
         var randomText = ""
         for _ in 0..<10 {
-            let randomIndex = Int.random(in: 0..<words.count)   //?-
-            let word = words[randomIndex]   //-
-            randomText += word + " "
+            randomText += words[Int.random(in: 0..<words.count)] + " "
         }
         return randomText
     }
