@@ -53,11 +53,13 @@ final class CustomTextField: UITextField {
         let result: String
         
         if range.length == 1 {
-            let end = text.index(text.startIndex, offsetBy: text.count - 1)
-            result = String(text[text.startIndex..<end])
+            let endIndex = text.index(text.startIndex, offsetBy: text.count - 1) //endIndex
+            result = String(text[text.startIndex..<endIndex])
         } else {
             result = text
         }
+        
+        //text.replacingOccurrences(of: <#T##StringProtocol#>, with: <#T##StringProtocol#>, range: <#T##Range<String.Index>?#>)
         
         textField.text = result
         

@@ -42,8 +42,8 @@ extension String {
         
         var randomText = ""
         for _ in 0..<10 {
-            let randomIndex = Int.random(in: 0..<words.count)
-            let word = words[randomIndex]
+            let randomIndex = Int.random(in: 0..<words.count)   //?-
+            let word = words[randomIndex]   //-
             randomText += word + " "
         }
         return randomText

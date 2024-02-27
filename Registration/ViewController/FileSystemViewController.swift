@@ -9,6 +9,8 @@ import UIKit
 
 class FileSystemViewController: UITableViewController {
     
+    let cellIndetifier = "Cell"
+    
     var contents: [URL] = []
     let fileManager = FileManager.default
     var currentDirectory: URL?
@@ -21,17 +23,23 @@ class FileSystemViewController: UITableViewController {
         showRootDirectoryContents()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        navigationItem.title = "Файловая система"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     //MARK: - Private Methods
     private func setupTableView() {
         self.tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIndetifier)
         
         tableView.delegate = self
         tableView.dataSource = self
     }
     
     private func setupNavigationBar() {
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(named: "AddFolder"), style: .done, target: self, action: #selector(addFolderButtonTapped)),
             UIBarButtonItem(image: UIImage(named: "AddFile"), style: .done, target: self, action: #selector(addFileButtonTapped))
@@ -42,10 +50,11 @@ class FileSystemViewController: UITableViewController {
     
     private func showRootDirectoryContents() {
          currentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+         //print(currentDirectory)
          loadContents()
      }
     
-    //MARK: - Creat Folders and Files
+    //MARK: - Creat Folders and Files and Logout
     @objc
     private func addFolderButtonTapped() {
         guard let directory = currentDirectory else { return }
@@ -64,13 +73,19 @@ class FileSystemViewController: UITableViewController {
         guard let directory = currentDirectory else { return }
         let newFileName = uniqueName(for: "Файл", in: directory)
         let newFileURL = directory.appendingPathComponent(newFileName)
-        fileManager.createFile(atPath: newFileURL.path, contents: nil, attributes: nil)
+        let text = String().generateRandomText()    //.data(using: .utf8) to contents
+        do {
+            try text.write(to: newFileURL, atomically: true, encoding: .utf8)
+            print("Текст записан")
+        } catch {
+            print("Ошибка при записи текста \(error.localizedDescription)")
+        }
         loadContents()
     }
     
     @objc
     private func logoutButtonTapped() {
-        UserDefaultsManager.shared.removeLoggedInStatus()
+        UserDefaultsManager.shared.removeLoggedInStatus()   //+-
         navigationController?.popToRootViewController(animated: true)
     }
 }
@@ -117,7 +132,7 @@ extension FileSystemViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIndetifier, for: indexPath)
         let item = contents[indexPath.row]
         cell.textLabel?.text = item.lastPathComponent
         return cell
@@ -139,7 +154,7 @@ extension FileSystemViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let indexPaths = [indexPath]
+        let indexPaths = [indexPath]    //-
         let item = contents[indexPath.row]
         do {
             try fileManager.removeItem(at: item)

@@ -10,17 +10,16 @@ import UIKit
 class RegistrationViewController: UIViewController {
     
     // hw
-    // 1. validation
-    // 2. mvc (view (with subviews) in vc)
-    
-    // q
-    // inheritance
-    // uiview
-    // UIViewController
-    
-    //MARK: - Properties
-    var isFirstTime = true
-    
+    // 1. mvc (view (with subviews) in vc)
+    // 2. validation: 8(***), Capitalized name, hide password, Capitalization
+    // 3. wrong pass alert
+    // 4. nvc, vc builder
+    // 5. FileManager Manager
+    // 6. animation cell updates
+    // 7. back button
+    // 8. few accounts, different contents
+    // 9. replacingOccurrences
+    // 10. setTextField -> restrict specific symbols
     
     //MARK: - Subviews
     private let titleLabel = UILabel(text: "Регистрация",
@@ -91,7 +90,7 @@ class RegistrationViewController: UIViewController {
         super.viewDidLoad()
         
         setupAppearance()
-        embeddingViews()
+        embeViews()
         setupConstraints()
         setDelegate()
         setupKeyboardDismissalGestures()
@@ -130,6 +129,7 @@ class RegistrationViewController: UIViewController {
     
     @objc
     private func handleRegistrationButtonTap() {
+        // ->r
         nameTextField.setBorderColor(nameTextField.isValid ? .systemGreen : .red)
         numberTextField.setBorderColor(numberTextField.isValid ? .systemGreen : .red)
         passwordTextField.setBorderColor(passwordTextField.isValid ? .systemGreen : .red)
@@ -137,14 +137,14 @@ class RegistrationViewController: UIViewController {
         guard let userName = nameTextField.text,
               let phoneNumber = numberTextField.text,
               let userPassword = passwordTextField.text,
-              !userName.isEmpty, !phoneNumber.isEmpty, !userPassword.isEmpty,
+              !userName.isEmpty, !phoneNumber.isEmpty, !userPassword.isEmpty,   //?
               userName.isValid(validType: .name),
               phoneNumber.isValid(validType: .phoneNumber),
               userPassword.isValid(validType: .password) else {
             return
         }
         
-        UserDefaultsManager.shared.saveLoginCredintails(login: userName, password: userPassword)
+        UserDefaultsManager.shared.saveLoginCredintails(login: userName, password: userPassword)    //+-
         
         handleSkipButtonTap()
         
@@ -153,17 +153,14 @@ class RegistrationViewController: UIViewController {
     
     @objc
     private func handleSkipButtonTap() {
-        let vc = AuthorizationViewController()
-        vc.title = "Авторизация"
-        
-        navigationController?.pushViewController(vc, animated: true)
+        navigationController?.pushViewController(AuthorizationViewController(), animated: true)
         view.endEditing(true)
     }
 }
 
 //MARK: - Embedding Views
 private extension RegistrationViewController {
-    func embeddingViews() {
+    func embeViews() {
         ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))",
                            font: .systemFont(ofSize: 18))
         
@@ -284,8 +281,8 @@ private extension RegistrationViewController {
         //UITapGestureRecognizer
         view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
         
-        //UISwipeGestureRecognizer
-        let swipeScreen = UISwipeGestureRecognizer(target: self, action: #selector(swipeKeyboard))
+        //UISwipeGestureRecognizer  //+--
+        let swipeScreen = UISwipeGestureRecognizer(target: self, action: #selector(hideKeyboard))
         swipeScreen.cancelsTouchesInView = false
         swipeScreen.direction = [.left, .right]
         view.addGestureRecognizer(swipeScreen)
@@ -293,11 +290,6 @@ private extension RegistrationViewController {
     
     @objc
     func hideKeyboard() {
-        view.endEditing(true)
-    }
-    
-    @objc
-    func swipeKeyboard() {
         view.endEditing(true)
     }
 }

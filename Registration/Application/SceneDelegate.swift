@@ -19,29 +19,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         if UserDefaultsManager.shared.isLoggedIn() {
             let navigationVC = UINavigationController()
-            
-            let fileSystemVC = FileSystemViewController()
-            fileSystemVC.title = "Файловая система"
-            
-            let registrationVC = RegistrationViewController()
-            registrationVC.title = "Регистрация"
-            
-            let authorizationVC = AuthorizationViewController()
-            authorizationVC.title = "Авторизация"
-
-            navigationVC.setViewControllers([registrationVC, authorizationVC, fileSystemVC], animated: false)
-
+            navigationVC.setViewControllers([RegistrationViewController(), FileSystemViewController()], animated: false)
             window?.rootViewController = navigationVC
-            window?.makeKeyAndVisible()
         } else {
-            let registrationVC = RegistrationViewController()
-            registrationVC.title = "Регистрация"
-            
-            let registrationNC = UINavigationController(rootViewController: registrationVC)
-            
-            window?.rootViewController = registrationNC
-            window?.makeKeyAndVisible()
+            window?.rootViewController = UINavigationController(rootViewController: RegistrationViewController())
         }
+        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

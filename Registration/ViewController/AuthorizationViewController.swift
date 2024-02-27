@@ -28,15 +28,22 @@ class AuthorizationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupAppearance()
-        embeddingViews()
+        embeViews()
         setupConstraints()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        setupAppearance()
     }
     
     //MARK: - Private Methods
     private func setupAppearance() {
         view.backgroundColor = .white
+        navigationItem.title = "Авторизация"
         navigationController?.navigationBar.isHidden = false
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
     
     @objc
@@ -48,23 +55,19 @@ class AuthorizationViewController: UIViewController {
             print("Неверные данные")
             return
         }
-        
-        let fileSystemVC = FileSystemViewController()
-        fileSystemVC.title = "Фаловая система"
-        navigationController?.navigationBar.prefersLargeTitles = true 
-        navigationController?.pushViewController(fileSystemVC, animated: true)
+        navigationController?.pushViewController(FileSystemViewController(), animated: true)
     }
 }
 
 //MARK: - Embedding Views
 private extension AuthorizationViewController {
-    func embeddingViews() {
+    func embeViews() {
         
         authorizationStackView = UIStackView(arrangedSubviews: [loginTextField, passwordTextField, loginButton],
                                              axis: .vertical,
                                              spacing: 30)
         
-        [authorizationStackView].forEach { view.addSubview($0) }
+        view.addSubview(authorizationStackView)
     }
 }
 

@@ -8,12 +8,14 @@
 import Foundation
 
 struct  UserDefaultsManager {
+    
     static let shared = UserDefaultsManager()
+    private init() { }  //!
     
     private let defaults = UserDefaults.standard
     
     func saveLoginCredintails(login: String, password: String) {
-        defaults.set(login, forKey: "login")
+        defaults.set(login, forKey: "login")    //constants!
         defaults.set(password, forKey: "password")
         defaults.set(true, forKey: "isLoggedIn")
     }
