@@ -79,7 +79,7 @@ private extension AuthorizationViewController {
         NSLayoutConstraint.activate([
             authorizationStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 50),
             authorizationStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            authorizationStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            authorizationStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 }

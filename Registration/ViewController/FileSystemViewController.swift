@@ -12,7 +12,6 @@ class FileSystemViewController: UITableViewController {
     let cellIndetifier = "Cell"
     
     var contents: [URL] = []
-    let fileManager = FileManager.default
     var currentDirectory: URL?
     
     override func viewDidLoad() {
@@ -49,10 +48,10 @@ class FileSystemViewController: UITableViewController {
     }
     
     private func showRootDirectoryContents() {
-         currentDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-         //print(currentDirectory)
-         loadContents()
-     }
+        currentDirectory = FileSystemManager.shared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+//        print(currentDirectory)
+        loadContents()
+    }
     
     //MARK: - Creat Folders and Files and Logout
     @objc
@@ -61,7 +60,7 @@ class FileSystemViewController: UITableViewController {
         let newFolderName = uniqueName(for: "Папка", in: directory)
         let newFolderURL = directory.appendingPathComponent(newFolderName, isDirectory: true)
         do {
-            try fileManager.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
+            try FileSystemManager.shared.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
             loadContents()
         } catch {
             print("Error creating folder: \(error.localizedDescription)")
@@ -93,21 +92,16 @@ class FileSystemViewController: UITableViewController {
 private extension FileSystemViewController {
     //MARK: - Directory contents
     func loadContents() {
-         guard let directory = currentDirectory else { return }
-         do {
-             contents = try fileManager.contentsOfDirectory(at: directory, includingPropertiesForKeys: nil)
-             .sorted(by: { $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending })
-             tableView.reloadData()
-         } catch {
-             print("Error loading contents: \(error.localizedDescription)")
-         }
-     }
+        guard let directory = currentDirectory else { return }
+        contents = FileSystemManager.shared.loadContents(inDirectory: directory)
+        tableView.reloadData()
+    }
     
     //MARK: - Generate unique name
     func uniqueName(for baseName: String, in directory: URL) -> String {
         var name = baseName
         var count = 1
-        let allFiles = try? fileManager.contentsOfDirectory(atPath: directory.path)
+        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
         while allFiles?.contains("\(name)") ?? false {
             count += 1
             name = "\(baseName) \(count)"
@@ -145,7 +139,7 @@ extension FileSystemViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let selectedItem = contents[indexPath.row]
-        if fileManager.directoryExists(at: selectedItem) {
+        if FileSystemManager.shared.fileManager.directoryExists(at: selectedItem) {
             currentDirectory = selectedItem
             loadContents()
         } else {
@@ -154,12 +148,11 @@ extension FileSystemViewController {
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let indexPaths = [indexPath]    //-
         let item = contents[indexPath.row]
         do {
-            try fileManager.removeItem(at: item)
+            try FileSystemManager.shared.removeItem(at: item)
             contents.remove(at: indexPath.row)
-            tableView.deleteRows(at: indexPaths, with: .automatic)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
         } catch {
             print("Error deleting: \(error.localizedDescription)")
         }

@@ -11,10 +11,11 @@ class RegistrationViewController: UIViewController {
     
     // hw
     // 1. mvc (view (with subviews) in vc)
-    // 2. validation: 8(***), Capitalized name, hide password, Capitalization
+    // 2. Capitalized name, hide password, Capitalization
+//validation: 8(***)
 // 3. wrong pass alert
     // 4. nvc, vc builder
-    // 5. FileManager Manager
+// 5. FileManager Manager
     // 6. animation cell updates
     // 7. back button
     // 8. few accounts, different contents
@@ -303,7 +304,7 @@ private extension RegistrationViewController {
             
             screenObjectsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
             screenObjectsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            screenObjectsStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            screenObjectsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             registrationButton.topAnchor.constraint(equalTo: screenObjectsStackView.bottomAnchor, constant: 40),
             registrationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
