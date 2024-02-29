@@ -14,7 +14,7 @@ class RegistrationViewController: UIViewController {
     // 2. Capitalized name, hide password, Capitalization
 //validation: 8(***)
 // 3. wrong pass alert
-    // 4. nvc, vc builder
+// 4. nvc, vc builder
 // 5. FileManager Manager
     // 6. animation cell updates
     // 7. back button

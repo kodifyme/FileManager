@@ -18,11 +18,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         if UserDefaultsManager.shared.isLoggedIn() {
-            let navigationVC = UINavigationController()
-            navigationVC.setViewControllers([RegistrationViewController(), FileSystemViewController()], animated: false)
-            window?.rootViewController = navigationVC
+            window?.rootViewController = NavigationControllerBuilder()
+                .setViewControllers([RegistrationViewController(), FileSystemViewController()])
+                .build()
         } else {
-            window?.rootViewController = UINavigationController(rootViewController: RegistrationViewController())
+            window?.rootViewController = NavigationControllerBuilder()
+                .setRootViewController(RegistrationViewController())
+                .build()
         }
         window?.makeKeyAndVisible()
     }
