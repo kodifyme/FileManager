@@ -1,37 +1,38 @@
 //
-//  RegistrationViewController.swift
+//  RegistrationView.swift
 //  Registration
 //
-//  Created by KOДИ on 14.02.2024.
+//  Created by KOДИ on 29.02.2024.
 //
 
 import UIKit
 
-class RegistrationViewController: UIViewController {
+protocol RegistrationViewDelegate: AnyObject {
+    func skipButtonTapped()
+}
+
+class RegistrationView: UIView {
     
-    // hw
-    // 1. mvc (view (with subviews) in vc)
-    // 2. Capitalized name, hide password, Capitalization
-//validation: 8(***)
-// 3. wrong pass alert
-// 4. nvc, vc builder
-// 5. FileManager Manager
-    // 6. animation cell updates
-    // 7. back button
-    // 8. few accounts, different contents
-    // 9. replacingOccurrences
-    // 10. setTextField -> restrict specific symbols
+    weak var delegate: RegistrationViewDelegate?
+    
+    
+    var user: User? {
+        guard let name = nameTextField.text,
+              let phoneNumber = numberTextField.text,
+              let password = passwordTextField.text else { return nil }
+        return User(name: name, phoneNumber: phoneNumber, password: password)
+    }
     
     //MARK: - Subviews
     private let titleLabel = UILabel(text: "Регистрация",
                                      font: .systemFont(ofSize: 30))
     
-    private let nameTextField = CustomTextField(placeholder: "Имя",
-                                                keyBoardType: .default)
-    private let numberTextField = CustomTextField(placeholder: "Номер телефона",
-                                                  keyBoardType: .phonePad)
-    private let passwordTextField = CustomTextField(placeholder: "Пароль",
-                                                    keyBoardType: .default)
+    let nameTextField = CustomTextField(placeholder: "Имя",
+                                        keyBoardType: .default)
+    let numberTextField = CustomTextField(placeholder: "Номер телефона",
+                                          keyBoardType: .phonePad)
+    let passwordTextField = CustomTextField(placeholder: "Пароль",
+                                            keyBoardType: .default)
     
     private var ageLabel = UILabel()
     
@@ -66,7 +67,7 @@ class RegistrationViewController: UIViewController {
     private var screenObjectsStackView = UIStackView()
     private var noticeStackView = UIStackView()
     
-    private lazy var registrationButton: UIButton = {
+    lazy var registrationButton: UIButton = {
         let button = UIButton(type: .system)
         button.setTitle("Зарегистрироваться", for: .normal)
         button.setTitleColor(.systemBlue, for: .normal)
@@ -87,33 +88,20 @@ class RegistrationViewController: UIViewController {
         return button
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
         setupAppearance()
         embeViews()
-        setupConstraints()
         setDelegate()
+        setupConstraints()
         setupKeyboardDismissalGestures()
-        registerKeyboardNotification()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        navigationController?.navigationBar.isHidden = true
-        nameTextField.text = nil
-        numberTextField.text = nil
-        passwordTextField.text = nil
-        
-        nameTextField.setBorderColor(.gray)
-        numberTextField.setBorderColor(.gray)
-        passwordTextField.setBorderColor(.gray)
     }
     
     //MARK: - Private Methods
     private func setupAppearance() {
-        view.backgroundColor = .white
+        backgroundColor = .white
+        translatesAutoresizingMaskIntoConstraints = false
     }
     
     //MARK: - Set Delegate
@@ -130,37 +118,33 @@ class RegistrationViewController: UIViewController {
     
     @objc
     private func handleRegistrationButtonTap() {
-        // ->r
-        nameTextField.setBorderColor(nameTextField.isValid ? .systemGreen : .red)
-        numberTextField.setBorderColor(numberTextField.isValid ? .systemGreen : .red)
-        passwordTextField.setBorderColor(passwordTextField.isValid ? .systemGreen : .red)
         
-        guard let userName = nameTextField.text,
-              let phoneNumber = numberTextField.text,
-              let userPassword = passwordTextField.text,
-              !userName.isEmpty, !phoneNumber.isEmpty, !userPassword.isEmpty,   //?
-              userName.isValid(validType: .name),
-              phoneNumber.isValid(validType: .phoneNumber),
-              userPassword.isValid(validType: .password) else {
+        guard let user = user,
+              user.name.isValid(validType: .name),
+              user.phoneNumber.isValid(validType: .phoneNumber),
+              user.password.isValid(validType: .password) else {
             return
         }
         
-        UserDefaultsManager.shared.saveLoginCredintails(login: userName, password: userPassword)    //+-
+        UserDefaultsManager.shared.saveLoginCredintails(login: user.name, password: user.password)    //+-
         
         handleSkipButtonTap()
         
-        print("Имя: \(userName), \nНомер телефона: \(phoneNumber), \nВозраст: \(Int(ageSlider.value)), \nПол: \(genderSegmentControl.titleForSegment(at: genderSegmentControl.selectedSegmentIndex) ?? "")")
+        print("Имя: \(user.name),\nПароль: \(user.password) \nНомер телефона: \(user.phoneNumber)")
     }
     
     @objc
     private func handleSkipButtonTap() {
-        navigationController?.pushViewController(AuthorizationViewController(), animated: true)
-        view.endEditing(true)
+        delegate?.skipButtonTapped()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
 //MARK: - Embedding Views
-private extension RegistrationViewController {
+private extension RegistrationView {
     func embeViews() {
         ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))",
                            font: .systemFont(ofSize: 18))
@@ -183,12 +167,12 @@ private extension RegistrationViewController {
          screenObjectsStackView,
          registrationButton,
          skipButton
-        ].forEach { view.addSubview($0) }
+        ].forEach { addSubview($0) }
     }
 }
 
 //MARK: - UITextFieldDelegate
-extension RegistrationViewController: UITextFieldDelegate {
+extension RegistrationView: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         
         switch textField {
@@ -230,88 +214,40 @@ extension RegistrationViewController: UITextFieldDelegate {
     }
 }
 
-//MARK: - Scrolling content
-private extension RegistrationViewController {
-    var originalContentOffset: CGPoint {
-        CGPoint(x: 0, y: 0)
-    }
-    
-    func registerKeyboardNotification() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillShow),
-                                               name: UIResponder.keyboardWillShowNotification,
-                                               object: nil)
-        
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(keyboardWillHide),
-                                               name: UIResponder.keyboardWillHideNotification,
-                                               object: nil)
-    }
-    
-    @objc
-    func keyboardWillShow(notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
-            return
-        }
-        
-        let keyboardHeight = keyboardFrame.height
-        
-        let registrationButtonFrame = registrationButton.frame
-        let registrationButtonBottomY = registrationButtonFrame.origin.y + registrationButtonFrame.size.height
-        let screenHeight = UIScreen.main.bounds.size.height
-        if registrationButtonBottomY > screenHeight - keyboardHeight {
-            let contentOffsetY = registrationButtonBottomY - (screenHeight - keyboardHeight)
-            UIView.animate(withDuration: 0.3) {
-                self.view.frame.origin.y = -contentOffsetY
-            }
-        }
-    }
-    
-    @objc
-    func keyboardWillHide(notification: Notification) {
-        UIView.animate(withDuration: 0.3) {
-            self.view.frame.origin.y = self.originalContentOffset.y
-        }
-    }
-}
-
-//MARK: - Keyboard Hiding
-private extension RegistrationViewController {
+private extension RegistrationView {
     func setupKeyboardDismissalGestures() {
         //UITapGestureRecognizer
-        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(hideKeyboard)))
         
         //UISwipeGestureRecognizer  //+--
         let swipeScreen = UISwipeGestureRecognizer(target: self, action: #selector(hideKeyboard))
         swipeScreen.cancelsTouchesInView = false
         swipeScreen.direction = [.left, .right]
-        view.addGestureRecognizer(swipeScreen)
+        addGestureRecognizer(swipeScreen)
     }
     
     @objc
     func hideKeyboard() {
-        view.endEditing(true)
+        endEditing(true)
     }
 }
 
 //MARK: - Setup Constraints
-private extension RegistrationViewController {
+private extension RegistrationView {
     func setupConstraints() {
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
+            titleLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
             
             screenObjectsStackView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 50),
-            screenObjectsStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            screenObjectsStackView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            screenObjectsStackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20),
+            screenObjectsStackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             registrationButton.topAnchor.constraint(equalTo: screenObjectsStackView.bottomAnchor, constant: 40),
-            registrationButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            registrationButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             
             skipButton.topAnchor.constraint(equalTo: registrationButton.bottomAnchor, constant: 30),
-            skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            skipButton.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
     }
 }
-
