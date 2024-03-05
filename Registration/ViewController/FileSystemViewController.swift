@@ -53,6 +53,14 @@ class FileSystemViewController: UITableViewController {
         loadContents()
     }
     
+    private func updateLeftBarButtonItem() {
+        if currentDirectory == FileSystemManager.shared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
+        } else {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .done, target: self, action: #selector(backButtonTapped))
+        }
+    }
+    
     //MARK: - Creat Folders and Files and Logout
     @objc
     private func addFolderButtonTapped() {
@@ -86,6 +94,15 @@ class FileSystemViewController: UITableViewController {
     private func logoutButtonTapped() {
         UserDefaultsManager.shared.removeLoggedInStatus()   //+-
         navigationController?.popToRootViewController(animated: true)
+    }
+    
+    @objc
+    private func backButtonTapped() {
+        guard let currentDirectory = currentDirectory else { return }
+        let parentDirectory = currentDirectory.deletingLastPathComponent()
+        self.currentDirectory = parentDirectory
+        loadContents()
+        updateLeftBarButtonItem()
     }
 }
 
@@ -142,6 +159,7 @@ extension FileSystemViewController {
         if FileSystemManager.shared.fileManager.directoryExists(at: selectedItem) {
             currentDirectory = selectedItem
             loadContents()
+            updateLeftBarButtonItem()
         } else {
             showFileContent(at: selectedItem)
         }
