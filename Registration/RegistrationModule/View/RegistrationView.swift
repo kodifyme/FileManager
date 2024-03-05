@@ -15,8 +15,7 @@ class RegistrationView: UIView {
     
     weak var delegate: RegistrationViewDelegate?
     
-    
-    var user: User? {
+    public var user: User? {
         guard let name = nameTextField.text,
               let phoneNumber = numberTextField.text,
               let password = passwordTextField.text else { return nil }
@@ -92,7 +91,7 @@ class RegistrationView: UIView {
         super.init(frame: frame)
         
         setupAppearance()
-        embeViews()
+        setupViews()
         setDelegate()
         setupConstraints()
         setupKeyboardDismissalGestures()
@@ -143,9 +142,9 @@ class RegistrationView: UIView {
     }
 }
 
-//MARK: - Embedding Views
+//MARK: - Setup Views
 private extension RegistrationView {
-    func embeViews() {
+    func setupViews() {
         ageLabel = UILabel(text: "Возраст: \(Int(ageSlider.value))",
                            font: .systemFont(ofSize: 18))
         

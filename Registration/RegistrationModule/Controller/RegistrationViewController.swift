@@ -10,7 +10,7 @@ import UIKit
 class RegistrationViewController: UIViewController {
     
     // hw
-    // 1. mvc (view (with subviews) in vc)
+// 1. mvc (view (with subviews) in vc)
     // 2. Capitalized name, hide password, Capitalization
 //validation: 8(***)
 // 3. wrong pass alert
