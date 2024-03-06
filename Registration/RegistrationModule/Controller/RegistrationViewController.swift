@@ -16,7 +16,7 @@ class RegistrationViewController: UIViewController {
 // 3. wrong pass alert
 // 4. nvc, vc builder
 // 5. FileManager Manager
-    // 6. animation cell updates
+// 6. animation cell updates
 // 7. back button
     // 8. few accounts, different contents
     // 9. replacingOccurrences

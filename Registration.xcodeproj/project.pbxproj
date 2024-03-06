@@ -105,6 +105,7 @@
 			children = (
 				1241A2AF2B7CBDA8006CEE16 /* Application */,
 				12ADF8842B850F630068E2A3 /* Services */,
+				129099C42B91178300FA409F /* Model */,
 				129099C32B91177100FA409F /* RegistrationModule */,
 				1213B76A2B96611800477D0D /* AuthorizationModule */,
 				124674F42B98986500765749 /* FileSystemModule */,
@@ -171,7 +172,6 @@
 		129099C32B91177100FA409F /* RegistrationModule */ = {
 			isa = PBXGroup;
 			children = (
-				129099C42B91178300FA409F /* Model */,
 				129099C52B91178900FA409F /* View */,
 				129099C62B91178F00FA409F /* Controller */,
 			);

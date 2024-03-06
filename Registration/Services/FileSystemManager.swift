@@ -36,6 +36,17 @@ class FileSystemManager {
     func removeItem(at url: URL) throws {
         try fileManager.removeItem(at: url)
     }
+    
+    func uniqueName(for baseName: String, in directory: URL) -> String {
+        var name = baseName
+        var count = 1
+        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
+        while allFiles?.contains("\(name)") ?? false {
+            count += 1
+            name = "\(baseName) \(count)"
+        }
+        return name
+    }
 }
 
 extension FileManager {

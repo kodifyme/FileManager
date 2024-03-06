@@ -65,11 +65,14 @@ class FileSystemViewController: UITableViewController {
     @objc
     private func addFolderButtonTapped() {
         guard let directory = currentDirectory else { return }
-        let newFolderName = uniqueName(for: "Папка", in: directory)
+        let newFolderName = FileSystemManager.shared.uniqueName(for: "Папка", in: directory)
         let newFolderURL = directory.appendingPathComponent(newFolderName, isDirectory: true)
         do {
             try FileSystemManager.shared.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
-            loadContents()
+            let firstFileIndex = contents.firstIndex(where: { !$0.hasDirectoryPath }) ?? contents.endIndex
+            contents.insert(newFolderURL, at: firstFileIndex)
+            let indexPath = IndexPath(row: firstFileIndex, section: 0)
+            tableView.insertRows(at: [indexPath], with: .automatic)
         } catch {
             print("Error creating folder: \(error.localizedDescription)")
         }
@@ -78,7 +81,7 @@ class FileSystemViewController: UITableViewController {
     @objc
     private func addFileButtonTapped() {
         guard let directory = currentDirectory else { return }
-        let newFileName = uniqueName(for: "Файл", in: directory)
+        let newFileName = FileSystemManager.shared.uniqueName(for: "Файл", in: directory)
         let newFileURL = directory.appendingPathComponent(newFileName)
         let text = String().generateRandomText()    //.data(using: .utf8) to contents
         do {
@@ -87,7 +90,10 @@ class FileSystemViewController: UITableViewController {
         } catch {
             print("Ошибка при записи текста \(error.localizedDescription)")
         }
-        loadContents()
+        let firstFileIndex = contents.endIndex 
+        contents.insert(newFileURL, at: firstFileIndex)
+        let indexPath = IndexPath(row: firstFileIndex, section: 0)
+        tableView.insertRows(at: [indexPath], with: .automatic)
     }
     
     @objc
@@ -96,6 +102,7 @@ class FileSystemViewController: UITableViewController {
         navigationController?.popToRootViewController(animated: true)
     }
     
+    //MARK: - Return to main directory
     @objc
     private func backButtonTapped() {
         guard let currentDirectory = currentDirectory else { return }
@@ -112,18 +119,6 @@ private extension FileSystemViewController {
         guard let directory = currentDirectory else { return }
         contents = FileSystemManager.shared.loadContents(inDirectory: directory)
         tableView.reloadData()
-    }
-    
-    //MARK: - Generate unique name
-    func uniqueName(for baseName: String, in directory: URL) -> String {
-        var name = baseName
-        var count = 1
-        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
-        while allFiles?.contains("\(name)") ?? false {
-            count += 1
-            name = "\(baseName) \(count)"
-        }
-        return name
     }
     
     //MARK: - Alert
