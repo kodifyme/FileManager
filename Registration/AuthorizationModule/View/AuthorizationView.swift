@@ -42,6 +42,7 @@ class AuthorizationView: UIView {
     //MARK: - Private Methods
     private func setupAppearance() {
         backgroundColor = .white
+        passwordTextField.isSecureText = true
         translatesAutoresizingMaskIntoConstraints = false
     }
     

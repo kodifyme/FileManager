@@ -10,9 +10,11 @@ import UIKit
 final class CustomTextField: UITextField {
     
     //MARK: - Properties
-    var isValid: Bool = false {
+    var isValid: Bool = false
+    
+    var isSecureText: Bool = false {
         didSet {
-            border.backgroundColor = isValid ? .systemGreen : .red
+            self.isSecureTextEntry = isSecureText
         }
     }
     
@@ -31,7 +33,7 @@ final class CustomTextField: UITextField {
         self.placeholder = placeholder
         translatesAutoresizingMaskIntoConstraints = false
         
-        embeddingViews()
+        setupView()
         configureBorderConstraints()
     }
     
@@ -40,7 +42,7 @@ final class CustomTextField: UITextField {
     }
     
     //MARK: - Private Methods
-    private func embeddingViews() {
+    private func setupView() {
         addSubview(border)
     }
     
@@ -63,12 +65,12 @@ final class CustomTextField: UITextField {
         
         textField.text = result
         
-        isValid = result.isValid(validType: validType)
-        
-        if isValid {
-            print(validMessage)
+        //MARK: - Set border color
+        if result.isEmpty {
+            border.backgroundColor = .gray
         } else {
-            print(wrongMessage)
+            isValid = result.isValid(validType: validType)
+            border.backgroundColor = isValid ? .systemGreen : .red
         }
     }
 }

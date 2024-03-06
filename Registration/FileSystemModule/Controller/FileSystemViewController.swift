@@ -40,8 +40,8 @@ class FileSystemViewController: UITableViewController {
     
     private func setupNavigationBar() {
         navigationItem.rightBarButtonItems = [
-            UIBarButtonItem(image: UIImage(named: "AddFolder"), style: .done, target: self, action: #selector(addFolderButtonTapped)),
-            UIBarButtonItem(image: UIImage(named: "AddFile"), style: .done, target: self, action: #selector(addFileButtonTapped))
+            UIBarButtonItem(image: UIImage(systemName: "folder.badge.plus"), style: .done, target: self, action: #selector(addFolderButtonTapped)),
+            UIBarButtonItem(image: UIImage(systemName: "line.3.horizontal.button.angledtop.vertical.right"), style: .done, target: self, action: #selector(addFileButtonTapped))
         ]
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
@@ -49,7 +49,7 @@ class FileSystemViewController: UITableViewController {
     
     private func showRootDirectoryContents() {
         currentDirectory = FileSystemManager.shared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-//        print(currentDirectory)
+        print(currentDirectory)
         loadContents()
     }
     
@@ -57,7 +57,7 @@ class FileSystemViewController: UITableViewController {
         if currentDirectory == FileSystemManager.shared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
         } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .done, target: self, action: #selector(backButtonTapped))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .done, target: self, action: #selector(backButtonTapped))
         }
     }
     

@@ -107,7 +107,7 @@
 				12ADF8842B850F630068E2A3 /* Services */,
 				129099C32B91177100FA409F /* RegistrationModule */,
 				1213B76A2B96611800477D0D /* AuthorizationModule */,
-				1241A2B02B7CBDB9006CEE16 /* ViewController */,
+				124674F42B98986500765749 /* FileSystemModule */,
 				1241A2B32B7CC69A006CEE16 /* Views */,
 				1241A2B42B7CD90E006CEE16 /* Extensions */,
 				1241A2AE2B7CBD65006CEE16 /* Resources */,
@@ -134,12 +134,12 @@
 			path = Application;
 			sourceTree = "<group>";
 		};
-		1241A2B02B7CBDB9006CEE16 /* ViewController */ = {
+		1241A2B02B7CBDB9006CEE16 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
 				12ADF8872B8515B60068E2A3 /* FileSystemViewController.swift */,
 			);
-			path = ViewController;
+			path = Controller;
 			sourceTree = "<group>";
 		};
 		1241A2B32B7CC69A006CEE16 /* Views */ = {
@@ -158,6 +158,14 @@
 				126D75DA2B7FE45000DA01FF /* String + Extensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		124674F42B98986500765749 /* FileSystemModule */ = {
+			isa = PBXGroup;
+			children = (
+				1241A2B02B7CBDB9006CEE16 /* Controller */,
+			);
+			path = FileSystemModule;
 			sourceTree = "<group>";
 		};
 		129099C32B91177100FA409F /* RegistrationModule */ = {
