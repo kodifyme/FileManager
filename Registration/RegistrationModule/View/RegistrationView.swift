@@ -19,7 +19,7 @@ class RegistrationView: UIView {
         guard let name = nameTextField.text,
               let phoneNumber = numberTextField.text,
               let password = passwordTextField.text else { return nil }
-        return User(name: name, phoneNumber: phoneNumber, password: password)
+        return User(name: name, phoneNumber: phoneNumber, password: password, userID: UUID().uuidString)
     }
     
     //MARK: - Subviews
@@ -122,14 +122,21 @@ class RegistrationView: UIView {
               user.name.isValid(validType: .name),
               user.phoneNumber.isValid(validType: .phoneNumber),
               user.password.isValid(validType: .password) else {
+            print("error")
             return
         }
         
-        UserDefaultsManager.shared.saveLoginCredintails(login: user.name, password: user.password)    //+-
+        guard !UserDefaultsManager.shared.userExists(name: user.name) else {
+            print("Error: User already exists")
+            return
+        }
         
+        
+        UserDefaultsManager.shared.saveUser(user: user)
+        print("\(UserDefaultsManager.shared.getUsers())")
         handleSkipButtonTap()
         
-        print("Имя: \(user.name),\nПароль: \(user.password) \nНомер телефона: \(user.phoneNumber)")
+        print("Имя: \(user.name),\nПароль: \(user.password) \nНомер телефона: \(user.phoneNumber), \(user.userID)")
     }
     
     @objc

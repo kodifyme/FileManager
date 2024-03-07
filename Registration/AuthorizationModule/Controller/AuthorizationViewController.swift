@@ -11,6 +11,8 @@ class AuthorizationViewController: UIViewController {
     
     private let authorizationView = AuthorizationView()
     
+    var user: User?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -43,8 +45,7 @@ extension AuthorizationViewController: AuthorizationViewDelegate {
     func loginButtonTapped() {
         guard let login = authorizationView.loginTextField.text,
               let password = authorizationView.passwordTextField.text,
-              UserDefaultsManager.shared.getLogin() == login,
-              UserDefaultsManager.shared.getPassword() == password else {
+              (UserDefaultsManager.shared.getUser(for: login, password: password)) != nil else {
             let alertController = UIAlertController(title: "Неверные данные", message: nil, preferredStyle: .alert)
             alertController.addAction(UIAlertAction(title: "Ok", style: .cancel))
             present(alertController, animated: true)

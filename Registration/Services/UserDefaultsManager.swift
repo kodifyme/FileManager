@@ -18,12 +18,8 @@ struct  UserDefaultsManager {
     private let loginKey = "login"
     private let passwordKey = "password"
     private let isLoggedInKey = "isLoggedIn"
-    
-    func saveLoginCredintails(login: String, password: String) {
-        defaults.set(login, forKey: loginKey)
-        defaults.set(password, forKey: passwordKey)
-        defaults.set(true, forKey: isLoggedInKey)
-    }
+    private let usersKey = "users"
+    private let userID = "userID"
     
     func getLogin() -> String? {
         defaults.string(forKey: loginKey)
@@ -39,5 +35,39 @@ struct  UserDefaultsManager {
     
     func removeLoggedInStatus() {
         defaults.removeObject(forKey: isLoggedInKey)
+    }
+    
+    func getUserID() -> String? {
+        defaults.string(forKey: userID)
+    }
+    
+    func saveUser(user: User) {
+        var users = getUsers()
+        users.append(user)
+        saveUsers(users)
+    }
+    
+    func getUsers() -> [User] {
+        if let data = defaults.data(forKey: usersKey),
+           let users = try? JSONDecoder().decode([User].self, from: data) {
+            return users
+        }
+        return []
+    }
+    
+    func saveUsers(_ users: [User]) {
+        if let data = try? JSONEncoder().encode(users) {
+            defaults.set(data, forKey: usersKey)
+        }
+    }
+    
+    func userExists(name: String) -> Bool {
+        let users = getUsers()
+        return users.contains { $0.name == name }
+    }
+    
+    func getUser(for login: String, password: String) -> User? {
+        let users = getUsers()
+        return users.first { $0.name == login && $0.password == password }
     }
 }

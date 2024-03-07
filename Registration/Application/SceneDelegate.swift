@@ -16,20 +16,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = NavigationControllerBuilder()
-        .setRootViewController(FileSystemViewController())
-        .build()
+        
+        if UserDefaultsManager.shared.isLoggedIn() {
+            window?.rootViewController = NavigationControllerBuilder()
+                .setViewControllers([RegistrationViewController(), FileSystemViewController()])
+                .build()
+        } else {
+            window?.rootViewController = NavigationControllerBuilder()
+                .setRootViewController(RegistrationViewController())
+                .build()
+        }
         window?.makeKeyAndVisible()
-//        if UserDefaultsManager.shared.isLoggedIn() {
-//            window?.rootViewController = NavigationControllerBuilder()
-//                .setViewControllers([RegistrationViewController(), FileSystemViewController()])
-//                .build()
-//        } else {
-//            window?.rootViewController = NavigationControllerBuilder()
-//                .setRootViewController(RegistrationViewController())
-//                .build()
-//        }
-//        window?.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {
