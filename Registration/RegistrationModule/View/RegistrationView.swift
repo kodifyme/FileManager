@@ -11,6 +11,12 @@ protocol RegistrationViewDelegate: AnyObject {
     func skipButtonTapped()
 }
 
+protocol RegistrationViewDataSource: AnyObject {
+    func clearText()
+    func setBorderColor(_ color: UIColor)
+    func getButtonFrame() -> CGRect
+}
+
 class RegistrationView: UIView {
     
     weak var delegate: RegistrationViewDelegate?
@@ -126,11 +132,10 @@ class RegistrationView: UIView {
             return
         }
         
-        guard !UserDefaultsManager.shared.userExists(name: user.name) else {
-            print("Error: User already exists")
+        guard !UserDefaultsManager.shared.userExists(name: user.name) else {    //incapsulte?
+            print("Error: User already registered")
             return
         }
-        
         
         UserDefaultsManager.shared.saveUser(user: user)
         print("\(UserDefaultsManager.shared.getUsers())")
@@ -142,6 +147,7 @@ class RegistrationView: UIView {
     @objc
     private func handleSkipButtonTap() {
         delegate?.skipButtonTapped()
+        endEditing(true)
     }
     
     required init?(coder: NSCoder) {
@@ -209,6 +215,8 @@ extension RegistrationView: UITextFieldDelegate {
             break
         }
         
+        //Set.digits.contains(string)
+        
         return false
     }
     
@@ -235,6 +243,26 @@ private extension RegistrationView {
     @objc
     func hideKeyboard() {
         endEditing(true)
+    }
+}
+
+//MARK: - RegistrationViewDataSource
+extension RegistrationView: RegistrationViewDataSource {
+    
+    func setBorderColor(_ color: UIColor) {
+        nameTextField.setBorderColor(color)
+        passwordTextField.setBorderColor(color)
+        numberTextField.setBorderColor(color)
+    }
+    
+    func getButtonFrame() -> CGRect {
+        return registrationButton.frame
+    }
+    
+    func clearText() {
+        nameTextField.setText(to: nil)
+        passwordTextField.setText(to: nil)
+        numberTextField.setText(to: nil)
     }
 }
 

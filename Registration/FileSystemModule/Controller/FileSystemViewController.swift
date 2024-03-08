@@ -11,6 +11,7 @@ class FileSystemViewController: UITableViewController {
     
     let cellIndetifier = "Cell"
     
+    let fileManagerShared = FileSystemManager.shared
     var contents: [URL] = []
     var currentDirectory: URL?
     
@@ -48,13 +49,13 @@ class FileSystemViewController: UITableViewController {
     }
     
     private func showRootDirectoryContents() {
-        currentDirectory = FileSystemManager.shared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+        currentDirectory = fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
         print(currentDirectory)
         loadContents()
     }
     
     private func updateLeftBarButtonItem() {
-        if currentDirectory == FileSystemManager.shared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+        if currentDirectory == fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .done, target: self, action: #selector(backButtonTapped))
@@ -65,11 +66,11 @@ class FileSystemViewController: UITableViewController {
     @objc
     private func addFolderButtonTapped() {
         guard let directory = currentDirectory else { return }
-        let newFolderName = FileSystemManager.shared.uniqueName(for: "Папка", in: directory)
+        let newFolderName = fileManagerShared.uniqueName(for: "Папка", in: directory)    //get file index
         let newFolderURL = directory.appendingPathComponent(newFolderName, isDirectory: true)
         do {
-            try FileSystemManager.shared.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
-            let firstFileIndex = contents.firstIndex(where: { !$0.hasDirectoryPath }) ?? contents.endIndex
+            try fileManagerShared.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
+            let firstFileIndex = contents.firstIndex(where: { !$0.hasDirectoryPath }) ?? contents.endIndex  //use index
             contents.insert(newFolderURL, at: firstFileIndex)
             let indexPath = IndexPath(row: firstFileIndex, section: 0)
             tableView.insertRows(at: [indexPath], with: .automatic)
@@ -81,7 +82,7 @@ class FileSystemViewController: UITableViewController {
     @objc
     private func addFileButtonTapped() {
         guard let directory = currentDirectory else { return }
-        let newFileName = FileSystemManager.shared.uniqueName(for: "Файл", in: directory)
+        let newFileName = fileManagerShared.uniqueName(for: "Файл", in: directory)
         let newFileURL = directory.appendingPathComponent(newFileName)
         let text = String().generateRandomText()    //.data(using: .utf8) to contents
         do {
@@ -117,7 +118,7 @@ private extension FileSystemViewController {
     //MARK: - Directory contents
     func loadContents() {
         guard let directory = currentDirectory else { return }
-        contents = FileSystemManager.shared.loadContents(inDirectory: directory)
+        contents = fileManagerShared.loadContents(inDirectory: directory)
         tableView.reloadData()
     }
     
@@ -151,7 +152,7 @@ extension FileSystemViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let selectedItem = contents[indexPath.row]
-        if FileSystemManager.shared.fileManager.directoryExists(at: selectedItem) {
+        if fileManagerShared.fileManager.directoryExists(at: selectedItem) {
             currentDirectory = selectedItem
             loadContents()
             updateLeftBarButtonItem()
@@ -163,7 +164,7 @@ extension FileSystemViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let item = contents[indexPath.row]
         do {
-            try FileSystemManager.shared.removeItem(at: item)
+            try fileManagerShared.removeItem(at: item)
             contents.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         } catch {

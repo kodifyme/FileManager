@@ -16,16 +16,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
+        let builder = NavigationControllerBuilder()
         
-        if UserDefaultsManager.shared.isLoggedIn() {
-            window?.rootViewController = NavigationControllerBuilder()
-                .setViewControllers([RegistrationViewController(), FileSystemViewController()])
-                .build()
-        } else {
-            window?.rootViewController = NavigationControllerBuilder()
-                .setRootViewController(RegistrationViewController())
-                .build()
-        }
+        let rootViewController = UserDefaultsManager.shared.isLoggedIn() ? builder.setViewControllers([RegistrationViewController(), FileSystemViewController()]).build() : builder.setRootViewController(RegistrationViewController()).build()
+        window?.rootViewController = rootViewController
         window?.makeKeyAndVisible()
     }
 

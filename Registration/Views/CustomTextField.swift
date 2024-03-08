@@ -7,6 +7,11 @@
 
 import UIKit
 
+protocol TextFieldDataSource: AnyObject {
+    func setText(to text: String?)
+    func setBorderColor(_ color: UIColor)
+}
+
 final class CustomTextField: UITextField {
     
     //MARK: - Properties
@@ -19,7 +24,7 @@ final class CustomTextField: UITextField {
     }
     
     //MARK: - Subviews
-    private let border: UIView = {
+    let border: UIView = {
         let view = UIView()
         view.backgroundColor = .gray
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -46,10 +51,6 @@ final class CustomTextField: UITextField {
         addSubview(border)
     }
     
-    func setBorderColor(_ color: UIColor) {
-        border.backgroundColor = color
-    }
-    
     func setTextField(textField: UITextField, validType: String.ValidTypes, validMessage: String, wrongMessage: String, string: String, range: NSRange) {
         let text = (textField.text ?? "") + string
         let result: String
@@ -72,6 +73,18 @@ final class CustomTextField: UITextField {
             isValid = result.isValid(validType: validType)
             border.backgroundColor = isValid ? .systemGreen : .red
         }
+    }
+}
+
+//MARK: - TextFieldDataSource
+extension CustomTextField: TextFieldDataSource {
+    
+    func setText(to text: String?) {
+        self.text = text
+    }
+    
+    func setBorderColor(_ color: UIColor) {
+        border.backgroundColor = color
     }
 }
 

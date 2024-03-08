@@ -10,17 +10,14 @@ import UIKit
 class RegistrationViewController: UIViewController {
     
     // hw
-// 1. mvc (view (with subviews) in vc)
-// 2. Capitalized name, Capitalization
-//validation: 8(***), hide password
-// 3. wrong pass alert
-// 4. nvc, vc builder
-// 5. FileManager Manager
-// 6. animation cell updates
-// 7. back button
-    // 8. few accounts, different contents
-    // 9. replacingOccurrences
-    // 10. setTextField -> restrict specific symbols
+// 2. Capitalization chekhing
+// 3. wrong pass alert +?
+// 6. cell ordering
+// 1. stored random text
+//    different contents -> different roots by user name
+// 9. replacingOccurrences
+// 10. setTextField -> restrict specific symbols
+// 11. file/folders user naming
     
     private let registrationView = RegistrationView()
     
@@ -37,13 +34,8 @@ class RegistrationViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.isHidden = true
-        registrationView.nameTextField.text = nil
-        registrationView.numberTextField.text = nil
-        registrationView.passwordTextField.text = nil
-        
-        registrationView.nameTextField.setBorderColor(.gray)
-        registrationView.numberTextField.setBorderColor(.gray)
-        registrationView.passwordTextField.setBorderColor(.gray)
+        registrationView.setBorderColor(.gray)
+        registrationView.clearText()
     }
     
     //MARK: - Private Methods
@@ -61,7 +53,6 @@ class RegistrationViewController: UIViewController {
 extension RegistrationViewController: RegistrationViewDelegate {
     func skipButtonTapped() {
         navigationController?.pushViewController(AuthorizationViewController(), animated: true)
-        registrationView.endEditing(true)
     }
 }
 
@@ -92,7 +83,7 @@ private extension RegistrationViewController {
         
         let keyboardHeight = keyboardFrame.height
         
-        let registrationButtonFrame = registrationView.registrationButton.frame
+        let registrationButtonFrame = registrationView.getButtonFrame()
         let registrationButtonBottomY = registrationButtonFrame.origin.y + registrationButtonFrame.size.height
         let screenHeight = UIScreen.main.bounds.size.height
         if registrationButtonBottomY > screenHeight - keyboardHeight {

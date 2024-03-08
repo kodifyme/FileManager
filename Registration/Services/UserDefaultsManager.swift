@@ -41,7 +41,7 @@ struct  UserDefaultsManager {
         defaults.string(forKey: userID)
     }
     
-    func saveUser(user: User) {
+    func saveUser(user: User) { //check existing here
         var users = getUsers()
         users.append(user)
         saveUsers(users)
