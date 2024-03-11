@@ -47,15 +47,7 @@ extension AuthorizationViewController: AuthorizationViewDelegate {
               let password = authorizationView.passwordTextField.text,  // view role
               (UserDefaultsManager.shared.getUser(for: login, password: password)) != nil else {
             // single file??
-            let alertController = UIAlertController(title: "Неверные данные", message: nil, preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "Ok", style: .cancel))
-            /*alertController.addTextField { textField in
-                textField.placeholder = "egbew"
-            }
-            UIAlertAction(title: "ok", style: .default) { _ in
-                print("\(alertController.textFields!.first!.text)")
-            }*/
-            present(alertController, animated: true)
+            failedLogin(title: "Неверные данные", message: "")
             return
         }
         navigationController?.pushViewController(FileSystemViewController(), animated: true)

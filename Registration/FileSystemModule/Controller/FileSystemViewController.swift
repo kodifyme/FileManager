@@ -84,14 +84,9 @@ class FileSystemViewController: UITableViewController {
         guard let directory = currentDirectory else { return }
         let newFileName = fileManagerShared.uniqueName(for: "Файл", in: directory)
         let newFileURL = directory.appendingPathComponent(newFileName)
-        let text = String().generateRandomText()    //.data(using: .utf8) to contents
-        do {
-            try text.write(to: newFileURL, atomically: true, encoding: .utf8)
-            print("Текст записан")
-        } catch {
-            print("Ошибка при записи текста \(error.localizedDescription)")
-        }
-        let firstFileIndex = contents.endIndex 
+        let text = String().data(using: .utf8)
+        fileManagerShared.saveTextToFile(text: text!, at: newFileURL)
+        let firstFileIndex = contents.endIndex
         contents.insert(newFileURL, at: firstFileIndex)
         let indexPath = IndexPath(row: firstFileIndex, section: 0)
         tableView.insertRows(at: [indexPath], with: .automatic)
@@ -121,15 +116,6 @@ private extension FileSystemViewController {
         contents = fileManagerShared.loadContents(inDirectory: directory)
         tableView.reloadData()
     }
-    
-    //MARK: - Alert
-    func showFileContent(at url: URL) {
-        let alertController = UIAlertController(title: url.lastPathComponent,
-                                                message: String().generateRandomText(),
-                                                preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        present(alertController, animated: true, completion: nil)
-    }
 }
 
 //MARK: - UITableViewDataSource
@@ -157,7 +143,14 @@ extension FileSystemViewController {
             loadContents()
             updateLeftBarButtonItem()
         } else {
-            showFileContent(at: selectedItem)
+            showTextInputAlert(at: selectedItem, 
+                               message: FileSystemManager.loadTextFromFile(at: selectedItem)) { [self] text in
+                guard let text = text else {
+                    print("Text is nil")
+                    return
+                }
+                fileManagerShared.saveTextToFile(text: text, at: selectedItem)
+            }
         }
     }
     

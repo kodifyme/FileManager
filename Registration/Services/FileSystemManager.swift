@@ -37,6 +37,7 @@ class FileSystemManager {
         try fileManager.removeItem(at: url)
     }
     
+    //MARK: - Unique Name
     func uniqueName(for baseName: String, in directory: URL) -> String {
         var name = baseName
         var count = 1
@@ -46,6 +47,27 @@ class FileSystemManager {
             name = "\(baseName) \(count)"
         }
         return name
+    }
+    
+    //MARK: - Load Text From File
+    static func loadTextFromFile(at url: URL) -> String? {
+        do {
+            let text = try String(contentsOf: url, encoding: .utf8)
+            return text
+        } catch {
+            print("Ошибка при загрузке текста: \(error.localizedDescription)")
+            return nil
+        }
+    }
+    
+    //MARK: - Save Text To File
+    func saveTextToFile(text: Data, at url: URL) {
+        do {
+            try text.write(to: url, options: .atomic)
+            print("Текст записан")
+        } catch {
+            print("Ошибка при записи текста: \(error.localizedDescription)")
+        }
     }
 }
 

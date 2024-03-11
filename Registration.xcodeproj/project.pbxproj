@@ -23,6 +23,7 @@
 		12A767572B8F62C1005D8F3C /* FileSystemManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12A767562B8F62C1005D8F3C /* FileSystemManager.swift */; };
 		12ADF8862B850FDC0068E2A3 /* UserDefaultsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ADF8852B850FDC0068E2A3 /* UserDefaultsManager.swift */; };
 		12ADF8882B8515B60068E2A3 /* FileSystemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12ADF8872B8515B60068E2A3 /* FileSystemViewController.swift */; };
+		12BDAD6B2B9F557C00ADF206 /* UIViewController + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12BDAD6A2B9F557C00ADF206 /* UIViewController + Extensions.swift */; };
 		12E989A72B83584C008919D8 /* AuthorizationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12E989A62B83584C008919D8 /* AuthorizationViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -45,6 +46,7 @@
 		12A767562B8F62C1005D8F3C /* FileSystemManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemManager.swift; sourceTree = "<group>"; };
 		12ADF8852B850FDC0068E2A3 /* UserDefaultsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsManager.swift; sourceTree = "<group>"; };
 		12ADF8872B8515B60068E2A3 /* FileSystemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewController.swift; sourceTree = "<group>"; };
+		12BDAD6A2B9F557C00ADF206 /* UIViewController + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController + Extensions.swift"; sourceTree = "<group>"; };
 		12E989A62B83584C008919D8 /* AuthorizationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -157,6 +159,7 @@
 				1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */,
 				1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */,
 				126D75DA2B7FE45000DA01FF /* String + Extensions.swift */,
+				12BDAD6A2B9F557C00ADF206 /* UIViewController + Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -288,6 +291,7 @@
 				129099C82B9117C100FA409F /* RegistrationView.swift in Sources */,
 				1241A2B22B7CC689006CEE16 /* CustomTextField.swift in Sources */,
 				1241A29F2B7CB918006CEE16 /* RegistrationViewController.swift in Sources */,
+				12BDAD6B2B9F557C00ADF206 /* UIViewController + Extensions.swift in Sources */,
 				1222AFE42B91DA9A00A2DAAD /* User.swift in Sources */,
 				12E989A72B83584C008919D8 /* AuthorizationViewController.swift in Sources */,
 				1213B76C2B96614200477D0D /* AuthorizationView.swift in Sources */,
