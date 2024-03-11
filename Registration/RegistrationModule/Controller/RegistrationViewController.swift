@@ -10,13 +10,15 @@ import UIKit
 class RegistrationViewController: UIViewController {
     
     // hw
-// 2. Capitalization chekhing
+    /* // 2. Capitalization chekhing
+       // 9. replacingOccurrences
+       // 10. setTextField -> restrict specific symbols
+     */
+    
 // 3. wrong pass alert +?
 // 6. cell ordering
 // 1. stored random text
 //    different contents -> different roots by user name
-// 9. replacingOccurrences
-// 10. setTextField -> restrict specific symbols
 // 11. file/folders user naming
     
     private let registrationView = RegistrationView()

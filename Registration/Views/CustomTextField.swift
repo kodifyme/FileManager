@@ -51,9 +51,18 @@ final class CustomTextField: UITextField {
         addSubview(border)
     }
     
+    
     func setTextField(textField: UITextField, validType: String.ValidTypes, validMessage: String, wrongMessage: String, string: String, range: NSRange) {
         let text = (textField.text ?? "") + string
-        let result: String
+        var result = text
+        
+        // Not Allowed Characters
+        let notAllowedCharacters = CharacterSet(charactersIn: "!@#$%^&*()_-+=|")
+        for char in string.unicodeScalars {
+            if notAllowedCharacters.contains(char) {
+                return
+            }
+        }
         
         if range.length == 1 {
             let endIndex = text.index(text.startIndex, offsetBy: text.count - 1) //endIndex
@@ -62,6 +71,11 @@ final class CustomTextField: UITextField {
             result = text
         }
         
+        //First Index is uppercased
+        if let firstChar = result.first, firstChar.isLowercase {
+            let uppercaseFirstChar = String(firstChar).uppercased()
+            result = uppercaseFirstChar + String(result.dropLast())
+        }
         //text.replacingOccurrences(of: <#T##StringProtocol#>, with: <#T##StringProtocol#>, range: <#T##Range<String.Index>?#>)
         
         textField.text = result
