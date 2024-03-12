@@ -25,7 +25,7 @@ extension UIViewController {
         present(alertController, animated: true, completion: nil)
     }
     
-    func showTextInputAlert(at url: URL, message: String?, completionHandler: @escaping (Data?) -> Void) {
+    func showTextInsideFileAlert(at url: URL, message: String?, completionHandler: @escaping (Data?) -> Void) {
         let alertController = UIAlertController(title: url.lastPathComponent,
                                                 message: message, preferredStyle: .alert)
         

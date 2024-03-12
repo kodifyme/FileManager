@@ -70,4 +70,8 @@ struct  UserDefaultsManager {
         let users = getUsers()
         return users.first { $0.name == login && $0.password == password }
     }
+    
+    func removeAllUsers() {
+        defaults.removeObject(forKey: usersKey)
+    }
 }

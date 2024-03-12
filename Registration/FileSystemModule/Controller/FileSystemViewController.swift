@@ -14,13 +14,21 @@ class FileSystemViewController: UITableViewController {
     let fileManagerShared = FileSystemManager.shared
     var contents: [URL] = []
     var currentDirectory: URL?
+    var user: User?
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupTableView()
         setupNavigationBar()
-        showRootDirectoryContents()
+        showRootDirectoryContents(user: user)
+        setUser(user!)
+    }
+    
+    func setUser(_ user: User) {
+        self.user = user
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,14 +56,20 @@ class FileSystemViewController: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
     }
     
-    private func showRootDirectoryContents() {
-        currentDirectory = fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-        print(currentDirectory)
-        loadContents()
+    private func showRootDirectoryContents(user: User?) {
+        if let user = user {
+            let documentURL = fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            currentDirectory = documentURL?.appendingPathComponent(user.name)
+            print(currentDirectory)
+            loadContents()
+        } else {
+            print("error by identify user")
+        }
     }
     
     private func updateLeftBarButtonItem() {
-        if currentDirectory == fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first {
+        if let documentDiretoryURL = fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
+            let userDirectoryURL = currentDirectory, userDirectoryURL == documentDiretoryURL.appendingPathComponent(user?.name ?? "") {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .done, target: self, action: #selector(backButtonTapped))
@@ -143,7 +157,7 @@ extension FileSystemViewController {
             loadContents()
             updateLeftBarButtonItem()
         } else {
-            showTextInputAlert(at: selectedItem, 
+            showTextInsideFileAlert(at: selectedItem, 
                                message: FileSystemManager.loadTextFromFile(at: selectedItem)) { [self] text in
                 guard let text = text else {
                     print("Text is nil")

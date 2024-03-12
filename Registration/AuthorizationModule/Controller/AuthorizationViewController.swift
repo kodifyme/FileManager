@@ -11,8 +11,6 @@ class AuthorizationViewController: UIViewController {
     
     private let authorizationView = AuthorizationView()
     
-    var user: User?
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -45,12 +43,14 @@ extension AuthorizationViewController: AuthorizationViewDelegate {
     func loginButtonTapped() {
         guard let login = authorizationView.loginTextField.text,    // view role
               let password = authorizationView.passwordTextField.text,  // view role
-              (UserDefaultsManager.shared.getUser(for: login, password: password)) != nil else {
-            // single file??
+              let user = UserDefaultsManager.shared.getUser(for: login, password: password) else {
             failedLogin(title: "Неверные данные", message: "")
             return
         }
-        navigationController?.pushViewController(FileSystemViewController(), animated: true)
+        FileSystemManager.shared.createDirectory(for: user)
+        let fileVC = FileSystemViewController()
+        fileVC.setUser(user)
+        navigationController?.pushViewController(fileVC, animated: true)
     }
 }
 

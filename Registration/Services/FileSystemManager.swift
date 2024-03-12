@@ -20,6 +20,19 @@ class FileSystemManager {
         try fileManager.createDirectory(at: url, withIntermediateDirectories: createIntermediates, attributes: attributes)
     }
     
+    func createDirectory(for user: User) {
+        do {
+            let documentURL = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+            let userDirectoryURL = documentURL.appendingPathComponent(user.name)
+            let uniqueUserDirectoryURL = userDirectoryURL.appendingPathComponent(user.userID)
+            if !fileManager.fileExists(atPath: uniqueUserDirectoryURL.path) {
+                try fileManager.createDirectory(at: uniqueUserDirectoryURL, withIntermediateDirectories: true)
+            }
+        } catch {
+            print("Error creating directory: \(error)")
+        }
+    }
+    
     //MARK: - Load Contents
     func loadContents(inDirectory directory: URL) -> [URL] {
         do {
