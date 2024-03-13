@@ -64,6 +64,7 @@ Carthage/Build/
 # Accio dependency management
 Dependencies/
 .accio/
+.DS_Store
 
 # fastlane
 # It is recommended to not store the screenshots in the git repo.
