@@ -30,7 +30,7 @@
 /* Begin PBXFileReference section */
 		1213B76B2B96614200477D0D /* AuthorizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationView.swift; sourceTree = "<group>"; };
 		1222AFE32B91DA9A00A2DAAD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
-		1241A2972B7CB918006CEE16 /* Registration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Registration.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1241A2972B7CB918006CEE16 /* FileManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1241A29A2B7CB918006CEE16 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1241A29C2B7CB918006CEE16 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		1241A29E2B7CB918006CEE16 /* RegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationViewController.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		1241A28E2B7CB918006CEE16 = {
 			isa = PBXGroup;
 			children = (
-				1241A2992B7CB918006CEE16 /* Registration */,
+				1241A2992B7CB918006CEE16 /* FileManager */,
 				1241A2982B7CB918006CEE16 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,12 +97,12 @@
 		1241A2982B7CB918006CEE16 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1241A2972B7CB918006CEE16 /* Registration.app */,
+				1241A2972B7CB918006CEE16 /* FileManager.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		1241A2992B7CB918006CEE16 /* Registration */ = {
+		1241A2992B7CB918006CEE16 /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
 				1241A2AF2B7CBDA8006CEE16 /* Application */,
@@ -115,7 +115,7 @@
 				1241A2B42B7CD90E006CEE16 /* Extensions */,
 				1241A2AE2B7CBD65006CEE16 /* Resources */,
 			);
-			path = Registration;
+			path = FileManager;
 			sourceTree = "<group>";
 		};
 		1241A2AE2B7CBD65006CEE16 /* Resources */ = {
@@ -218,9 +218,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		1241A2962B7CB918006CEE16 /* Registration */ = {
+		1241A2962B7CB918006CEE16 /* FileManager */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 1241A2AB2B7CB919006CEE16 /* Build configuration list for PBXNativeTarget "Registration" */;
+			buildConfigurationList = 1241A2AB2B7CB919006CEE16 /* Build configuration list for PBXNativeTarget "FileManager" */;
 			buildPhases = (
 				1241A2932B7CB918006CEE16 /* Sources */,
 				1241A2942B7CB918006CEE16 /* Frameworks */,
@@ -230,9 +230,9 @@
 			);
 			dependencies = (
 			);
-			name = Registration;
+			name = FileManager;
 			productName = Registration;
-			productReference = 1241A2972B7CB918006CEE16 /* Registration.app */;
+			productReference = 1241A2972B7CB918006CEE16 /* FileManager.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -250,7 +250,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 1241A2922B7CB918006CEE16 /* Build configuration list for PBXProject "Registration" */;
+			buildConfigurationList = 1241A2922B7CB918006CEE16 /* Build configuration list for PBXProject "FileManager" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -263,7 +263,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				1241A2962B7CB918006CEE16 /* Registration */,
+				1241A2962B7CB918006CEE16 /* FileManager */,
 			);
 		};
 /* End PBXProject section */
@@ -446,7 +446,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UJRW24XH5L;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Registration/Resources/Info.plist;
+				INFOPLIST_FILE = FileManager/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -456,7 +456,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.koddek.Registration;
+				PRODUCT_BUNDLE_IDENTIFIER = com.koddek.FileManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -477,7 +477,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = UJRW24XH5L;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Registration/Resources/Info.plist;
+				INFOPLIST_FILE = FileManager/Resources/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -487,7 +487,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.koddek.Registration;
+				PRODUCT_BUNDLE_IDENTIFIER = com.koddek.FileManager;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = NO;
@@ -502,7 +502,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		1241A2922B7CB918006CEE16 /* Build configuration list for PBXProject "Registration" */ = {
+		1241A2922B7CB918006CEE16 /* Build configuration list for PBXProject "FileManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1241A2A92B7CB919006CEE16 /* Debug */,
@@ -511,7 +511,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		1241A2AB2B7CB919006CEE16 /* Build configuration list for PBXNativeTarget "Registration" */ = {
+		1241A2AB2B7CB919006CEE16 /* Build configuration list for PBXNativeTarget "FileManager" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				1241A2AC2B7CB919006CEE16 /* Debug */,
