@@ -11,12 +11,11 @@ class FileSystemViewController: UITableViewController {
     
     let cellIndetifier = "Cell"
     
-    let fileManagerShared = FileSystemManager.shared
+    let fileManager = FileSystemManager.shared
+    let userDefaultManager = UserDefaultsManager.shared
     var contents: [URL] = []
     var currentDirectory: URL?
     var user: User?
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +57,7 @@ class FileSystemViewController: UITableViewController {
     
     private func showRootDirectoryContents(user: User?) {
         if let user = user {
-            let documentURL = fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
+            let documentURL = fileManager.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
             currentDirectory = documentURL?.appendingPathComponent(user.name)
             print(currentDirectory)
             loadContents()
@@ -68,7 +67,7 @@ class FileSystemViewController: UITableViewController {
     }
     
     private func updateLeftBarButtonItem() {
-        if let documentDiretoryURL = fileManagerShared.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
+        if let documentDiretoryURL = fileManager.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
            let userDirectoryURL = currentDirectory, userDirectoryURL == documentDiretoryURL.appendingPathComponent(user?.name ?? "") {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
         } else {
@@ -91,7 +90,7 @@ class FileSystemViewController: UITableViewController {
             
             let newFolderURL = directory.appendingPathComponent(folderName, isDirectory: true)
             do {
-                try fileManagerShared.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
+                try fileManager.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
                 let firstFileIndex = self.contents.firstIndex(where: { !$0.hasDirectoryPath }) ?? self.contents.endIndex
                 self.contents.insert(newFolderURL, at: firstFileIndex)
                 let indexPath = IndexPath(row: firstFileIndex, section: 0)
@@ -121,7 +120,7 @@ class FileSystemViewController: UITableViewController {
                   let directory = currentDirectory else { return }
             let newFileURL = directory.appendingPathComponent(fileName)
             let text = "".data(using: .utf8)
-            self.fileManagerShared.saveTextToFile(text: text!, at: newFileURL)
+            self.fileManager.saveTextToFile(text: text!, at: newFileURL)
             let firstFileIndex = self.contents.endIndex
             self.contents.insert(newFileURL, at: firstFileIndex)
             let indexPath = IndexPath(row: firstFileIndex, section: 0)
@@ -135,7 +134,7 @@ class FileSystemViewController: UITableViewController {
     
     @objc
     private func logoutButtonTapped() {
-        UserDefaultsManager.shared.removeLoggedInStatus()   //+-
+        userDefaultManager.removeLoggedInStatus()   //+-
         navigationController?.popToRootViewController(animated: true)
     }
     
@@ -154,7 +153,7 @@ private extension FileSystemViewController {
     //MARK: - Directory contents
     func loadContents() {
         guard let directory = currentDirectory else { return }
-        contents = fileManagerShared.loadContents(inDirectory: directory)
+        contents = fileManager.loadContents(inDirectory: directory)
         tableView.reloadData()
     }
 }
@@ -168,7 +167,7 @@ extension FileSystemViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellIndetifier, for: indexPath)
         let item = contents[indexPath.row]
-        let directory = fileManagerShared.fileManager.directoryExists(at: item)
+        let directory = fileManager.fileManager.directoryExists(at: item)
         cell.imageView?.image = directory ? UIImage(systemName: "folder") : UIImage(systemName: "doc.text")
         cell.textLabel?.text = item.lastPathComponent
         return cell
@@ -181,7 +180,7 @@ extension FileSystemViewController {
         tableView.deselectRow(at: indexPath, animated: true)
         
         let selectedItem = contents[indexPath.row]
-        if fileManagerShared.fileManager.directoryExists(at: selectedItem) {
+        if fileManager.fileManager.directoryExists(at: selectedItem) {
             currentDirectory = selectedItem
             loadContents()
             updateLeftBarButtonItem()
@@ -192,7 +191,7 @@ extension FileSystemViewController {
                     print("Text is nil")
                     return
                 }
-                fileManagerShared.saveTextToFile(text: text, at: selectedItem)
+                fileManager.saveTextToFile(text: text, at: selectedItem)
             }
         }
     }
@@ -200,7 +199,7 @@ extension FileSystemViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         let item = contents[indexPath.row]
         do {
-            try fileManagerShared.removeItem(at: item)
+            try fileManager.removeItem(at: item)
             contents.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
         } catch {

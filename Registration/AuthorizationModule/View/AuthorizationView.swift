@@ -8,13 +8,13 @@
 import UIKit
 
 protocol AuthorizationViewDelegate: AnyObject {
-    func loginButtonTapped()
+    func loginButtonTapped(login: String?, password: String?)
 }
 
 class AuthorizationView: UIView {
     
     weak var delegate: AuthorizationViewDelegate?
-    
+
     //MARK: - Subviews
     let loginTextField = CustomTextField(placeholder: "Логин", keyBoardType: .default)
     let passwordTextField = CustomTextField(placeholder: "Пароль", keyBoardType: .default)
@@ -48,7 +48,7 @@ class AuthorizationView: UIView {
     
     @objc
     private func handleLoginButtonTap() {
-        delegate?.loginButtonTapped()
+        delegate?.loginButtonTapped(login: loginTextField.text, password: passwordTextField.text)
     }
     
     required init?(coder: NSCoder) {
