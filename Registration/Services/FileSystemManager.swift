@@ -24,9 +24,8 @@ class FileSystemManager {
         do {
             let documentURL = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             let userDirectoryURL = documentURL.appendingPathComponent(user.name)
-            let uniqueUserDirectoryURL = userDirectoryURL.appendingPathComponent(user.userID)
-            if !fileManager.fileExists(atPath: uniqueUserDirectoryURL.path) {
-                try fileManager.createDirectory(at: uniqueUserDirectoryURL, withIntermediateDirectories: true)
+            if !fileManager.fileExists(atPath: userDirectoryURL.path) {
+                try fileManager.createDirectory(at: userDirectoryURL, withIntermediateDirectories: true)
             }
         } catch {
             print("Error creating directory: \(error)")
@@ -50,17 +49,17 @@ class FileSystemManager {
         try fileManager.removeItem(at: url)
     }
     
-    //MARK: - Unique Name
-    func uniqueName(for baseName: String, in directory: URL) -> String {
-        var name = baseName
-        var count = 1
-        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
-        while allFiles?.contains("\(name)") ?? false {
-            count += 1
-            name = "\(baseName) \(count)"
-        }
-        return name
-    }
+//    //MARK: - Unique Name
+//    func uniqueName(for baseName: String, in directory: URL) -> String {
+//        var name = baseName
+//        var count = 1
+//        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
+//        while allFiles?.contains("\(name)") ?? false {
+//            count += 1
+//            name = "\(baseName) \(count)"
+//        }
+//        return name
+//    }
     
     //MARK: - Load Text From File
     static func loadTextFromFile(at url: URL) -> String? {

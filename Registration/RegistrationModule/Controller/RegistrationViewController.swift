@@ -15,11 +15,12 @@ class RegistrationViewController: UIViewController {
        // 10. setTextField -> restrict specific symbols
       // 1. stored random text
      //    different contents -> different roots by user name
+     // 11. file/folders user naming
      */
     
 // 3. wrong pass alert +?
 // 6. cell ordering
-// 11. file/folders user naming
+
     
     private let registrationView = RegistrationView()
     
