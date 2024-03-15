@@ -91,9 +91,22 @@ class FileSystemViewController: UITableViewController {
             let newFolderURL = directory.appendingPathComponent(folderName, isDirectory: true)
             do {
                 try fileManager.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
-                let firstFileIndex = self.contents.firstIndex(where: { !$0.hasDirectoryPath }) ?? self.contents.endIndex
-                self.contents.insert(newFolderURL, at: firstFileIndex)
-                let indexPath = IndexPath(row: firstFileIndex, section: 0)
+                
+                self.contents.sort(by: {
+                    if $0.hasDirectoryPath && $1.hasDirectoryPath {
+                        return $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
+                    } else if $0.hasDirectoryPath {
+                        return true
+                    } else if $1.hasDirectoryPath {
+                        return false
+                    } else {
+                        return $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
+                    }
+                })
+                let indexForFolder = self.contents.firstIndex { $0.lastPathComponent > newFolderURL.lastPathComponent } ?? self.contents.endIndex
+                self.contents.insert(newFolderURL, at: indexForFolder)
+                
+                let indexPath = IndexPath(row: indexForFolder, section: 0)
                 self.tableView.insertRows(at: [indexPath], with: .automatic)
             } catch {
                 print("Error creating folder: \(error.localizedDescription)")
