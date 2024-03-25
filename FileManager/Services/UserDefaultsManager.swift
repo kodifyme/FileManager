@@ -71,6 +71,16 @@ struct  UserDefaultsManager {
         return users.first { $0.name == login && $0.password == password }
     }
     
+    func loginUser(_ user: User) {
+        defaults.set(user.userID, forKey: userID)
+        defaults.set(true, forKey: isLoggedInKey)
+    }
+    
+    func logoutUser() {
+        defaults.removeObject(forKey: userID)
+        defaults.set(false, forKey: isLoggedInKey)
+    }
+    
     func removeAllUsers() {
         defaults.removeObject(forKey: usersKey)
     }

@@ -57,12 +57,19 @@ final class CustomTextField: UITextField {
         var result = text
         
         // Not Allowed Characters
-        let notAllowedCharacters = CharacterSet(charactersIn: "!@#$%^&*()_-+=|")
-        for char in string.unicodeScalars {
-            if notAllowedCharacters.contains(char) {
-                return
-            }
-        }
+//        let notAllowedCharacters = CharacterSet(charactersIn: "!@#$%^&*()_-+=|")
+//        for char in string.unicodeScalars {
+//            if notAllowedCharacters.contains(char) {
+//                return
+//            }
+//        }
+        
+        // use for shorting code / refactoring
+//        let allowedCharacters = CharacterSet.letters
+//        return result.rangeOfCharacter(from: allowedCharacters.inverted) == nil
+            
+
+        
         
         if range.length == 1 {
             let endIndex = text.index(text.startIndex, offsetBy: text.count - 1) //endIndex
@@ -76,7 +83,10 @@ final class CustomTextField: UITextField {
             let uppercaseFirstChar = String(firstChar).uppercased()
             result = uppercaseFirstChar + String(result.dropLast())
         }
-        //text.replacingOccurrences(of: <#T##StringProtocol#>, with: <#T##StringProtocol#>, range: <#T##Range<String.Index>?#>)
+        
+        //myString.capitalized == myString
+        
+        //text.replacingOccurrences(of: <#T##StringProtocol#>, with: <#T##StringProtocol#>, range: <#T##Range<String.Index>?#>) //use for code shorting (refactoring)
         
         textField.text = result
         

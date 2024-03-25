@@ -12,8 +12,8 @@ protocol RegistrationViewDelegate: AnyObject {
 }
 
 protocol RegistrationViewDataSource: AnyObject {
-    func clearText()
-    func setBorderColor(_ color: UIColor)
+    func clearText()    //-> Delegate method
+    func setBorderColor(_ color: UIColor) //-> Delegate method
     func getButtonFrame() -> CGRect
 }
 
@@ -140,7 +140,6 @@ class RegistrationView: UIView {
         UserDefaultsManager.shared.saveUser(user: user)
         print("\(UserDefaultsManager.shared.getUsers())")
         handleSkipButtonTap()
-        
         print("Имя: \(user.name),\nПароль: \(user.password) \nНомер телефона: \(user.phoneNumber), \(user.userID)")
     }
     
@@ -257,7 +256,7 @@ extension RegistrationView: RegistrationViewDataSource {
     }
     
     func getButtonFrame() -> CGRect {
-        return registrationButton.frame
+        registrationButton.frame
     }
     
     func clearText() {

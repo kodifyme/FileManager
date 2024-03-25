@@ -7,27 +7,23 @@
 
 import UIKit
 
-class FileSystemViewController: UITableViewController {
-    
-    let cellIndetifier = "Cell"
+class FileSystemViewController: UIViewController {
     
     let fileManager = FileSystemManager.shared
-    let userDefaultManager = UserDefaultsManager.shared
+    let usertManager = UserDefaultsManager.shared
     var contents: [URL] = []
     var currentDirectory: URL?
-    var user: User?
+    
+    private let fileSystemView = FileSystemView()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupTableView()
+        setupViews()
         setupNavigationBar()
-        showRootDirectoryContents(user: user)
-        setUser(user!)
-    }
-    
-    func setUser(_ user: User) {
-        self.user = user
+        showRootDirectoryContents()
+        setupConstraints()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,13 +33,10 @@ class FileSystemViewController: UITableViewController {
         navigationController?.navigationBar.prefersLargeTitles = true
     }
     
-    //MARK: - Private Methods
-    private func setupTableView() {
-        self.tableView = UITableView(frame: .zero, style: .insetGrouped)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIndetifier)
-        
-        tableView.delegate = self
-        tableView.dataSource = self
+    private func setupViews() {
+        view.addSubview(fileSystemView)
+        fileSystemView.fileSystemViewControllerDelegate = self
+        fileSystemView.fileSystemViewDataSource = self
     }
     
     private func setupNavigationBar() {
@@ -52,46 +45,39 @@ class FileSystemViewController: UITableViewController {
             UIBarButtonItem(image: UIImage(systemName: "doc.text"), style: .done, target: self, action: #selector(addFileButtonTapped))
         ]
         
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
+        updateLeftBarButtonItem()
     }
     
-    private func showRootDirectoryContents(user: User?) {
-        if let user = user {
-            let documentURL = fileManager.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first
-            currentDirectory = documentURL?.appendingPathComponent(user.name)
-            print(currentDirectory)
-            loadContents()
-        } else {
-            print("error by identify user")
-        }
+    private func showRootDirectoryContents() {
+        currentDirectory = fileManager.showRootDirectoryContents()
+        loadContents()
+        print(currentDirectory)
+    }
+    
+    private func loadContents() {
+        guard let directory = currentDirectory else { return }
+        contents = fileManager.loadContents(inDirectory: directory)
+        fileSystemView.reloadData()
     }
     
     private func updateLeftBarButtonItem() {
-        if let documentDiretoryURL = fileManager.fileManager.urls(for: .documentDirectory, in: .userDomainMask).first,
-           let userDirectoryURL = currentDirectory, userDirectoryURL == documentDiretoryURL.appendingPathComponent(user?.name ?? "") {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .done, target: self, action: #selector(logoutButtonTapped))
+        if let currentDirectory = currentDirectory, currentDirectory != fileManager.showRootDirectoryContents() {
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self, action: #selector(backButtonTapped))
         } else {
-            navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "arrow.backward"), style: .done, target: self, action: #selector(backButtonTapped))
+            navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .plain, target: self, action: #selector(logoutButtonTapped))
         }
     }
     
-    //MARK: - Creat Folders and Files and Logout
-    @objc private func addFolderButtonTapped() {
-        let alertController = UIAlertController(title: "Новая папка", message: "Введите имя папки", preferredStyle: .alert)
-        alertController.addTextField { textField in
-            textField.placeholder = "Имя папки"
-        }
-        
-        let createAction = UIAlertAction(title: "Создать", style: .default) { [weak self] _ in
-            guard let self = self,
-                  let folderName = alertController.textFields?.first?.text,
+    @objc
+    private func addFolderButtonTapped() {
+        showFolderCreationAlert() { folderName in
+            guard let folderName = folderName,
                   !folderName.isEmpty,
-                  let directory = currentDirectory else { return }
-            
-            let newFolderURL = directory.appendingPathComponent(folderName, isDirectory: true)
+                  let directory = self.currentDirectory else { return }
+            let newFolderURL = directory.appendingPathComponent(folderName, 
+                                                                isDirectory: true)
             do {
-                try fileManager.createDirectory(at: newFolderURL, withIntermediateDirectories: false, attributes: nil)
-                
+                try self.fileManager.createDirectory(at: newFolderURL)
                 self.contents.sort(by: {
                     if $0.hasDirectoryPath && $1.hasDirectoryPath {
                         return $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
@@ -105,118 +91,101 @@ class FileSystemViewController: UITableViewController {
                 })
                 let indexForFolder = self.contents.firstIndex { $0.lastPathComponent > newFolderURL.lastPathComponent } ?? self.contents.endIndex
                 self.contents.insert(newFolderURL, at: indexForFolder)
-                
                 let indexPath = IndexPath(row: indexForFolder, section: 0)
-                self.tableView.insertRows(at: [indexPath], with: .automatic)
+                self.fileSystemView.insertRows(at: [indexPath], with: .automatic)
             } catch {
                 print("Error creating folder: \(error.localizedDescription)")
             }
         }
-        let cancelAction = UIAlertAction(title: "Выйти", style: .cancel)
-        alertController.addAction(createAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true)
     }
     
     @objc
     private func addFileButtonTapped() {
-        let alertController = UIAlertController(title: "Создание файла", message: "Введите имя файла", preferredStyle: .alert)
-
-        alertController.addTextField { textField in
-            textField.placeholder = "Имя файла"
-        }
-
-        let createAction = UIAlertAction(title: "Создать", style: .default) { [weak self] _ in
-            guard let self = self,
-                  let fileName = alertController.textFields?.first?.text,
-                  !fileName.isEmpty,
-                  let directory = currentDirectory else { return }
+        showFileCreationAlert { fileName in
+            guard let fileName = fileName, !fileName.isEmpty, let directory = self.currentDirectory else { return }
             let newFileURL = directory.appendingPathComponent(fileName)
             let text = "".data(using: .utf8)
+            self.fileManager.createFile(atPath: newFileURL.path, contents: text)
             self.fileManager.saveTextToFile(text: text!, at: newFileURL)
-            let firstFileIndex = self.contents.endIndex
-            self.contents.insert(newFileURL, at: firstFileIndex)
-            let indexPath = IndexPath(row: firstFileIndex, section: 0)
-            self.tableView.insertRows(at: [indexPath], with: .automatic)
+            self.contents.append(newFileURL)
+            let indexPath = IndexPath(row: self.contents.count - 1, section: 0)
+            self.fileSystemView.beginUpdates()
+            self.fileSystemView.insertRows(at: [indexPath], with: .automatic)
+            self.fileSystemView.endUpdates()
+            print("Файл - \(fileName) создан")
         }
-        let cancelAction = UIAlertAction(title: "Отмена", style: .cancel)
-        alertController.addAction(createAction)
-        alertController.addAction(cancelAction)
-        present(alertController, animated: true, completion: nil)
     }
     
     @objc
     private func logoutButtonTapped() {
-        userDefaultManager.removeLoggedInStatus()   //+-
+        guard currentDirectory == fileManager.showRootDirectoryContents() else { return }
         navigationController?.popToRootViewController(animated: true)
     }
     
-    //MARK: - Return to main directory
     @objc
-    private func backButtonTapped() {
+    func backButtonTapped() {
         guard let currentDirectory = currentDirectory else { return }
         let parentDirectory = currentDirectory.deletingLastPathComponent()
         self.currentDirectory = parentDirectory
-        loadContents()
+        contents = fileManager.loadContents(inDirectory: parentDirectory)
+        fileSystemView.reloadData()
         updateLeftBarButtonItem()
     }
 }
 
-private extension FileSystemViewController {
-    //MARK: - Directory contents
-    func loadContents() {
-        guard let directory = currentDirectory else { return }
-        contents = fileManager.loadContents(inDirectory: directory)
-        tableView.reloadData()
+extension FileSystemViewController: FileSystemViewDelegate {
+    func didSelectDirectory(at indexPath: IndexPath) {
+        let selectedItem = contents[indexPath.row]
+        currentDirectory = selectedItem
+        loadContents()
+        updateLeftBarButtonItem()
+    }
+    
+    func deleteItem(at indexPath: IndexPath) {
+        do {
+            let item = contents[indexPath.row]
+            try fileManager.removeItem(at: item)
+            contents.remove(at: indexPath.row)
+            fileSystemView.deleteRows(at: [indexPath], with: .automatic)
+        } catch {
+            print("Error deleting item: \(error.localizedDescription)")
+        }
+    }
+    
+    func didSelectFile(at url: URL) {
+        let message = fileManager.loadTextFromFile(at: url)
+        showTextInsideFileAlert(at: url, message: message) { [weak self] text in
+            guard let text = text,
+                  let self = self else {
+                print("Text is nil")
+                return
+            }
+            fileManager.saveTextToFile(text: text, at: url)
+        }
     }
 }
 
-//MARK: - UITableViewDataSource
-extension FileSystemViewController {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+extension FileSystemViewController: FileSystemViewDataSource {
+    func numberOfItems(inSection section: Int) -> Int {
         contents.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIndetifier, for: indexPath)
-        let item = contents[indexPath.row]
-        let directory = fileManager.fileManager.directoryExists(at: item)
-        cell.imageView?.image = directory ? UIImage(systemName: "folder") : UIImage(systemName: "doc.text")
-        cell.textLabel?.text = item.lastPathComponent
-        return cell
+    func item(at indexPath: IndexPath) -> URL {
+        contents[indexPath.row]
+    }
+    
+    func directoryExists(at url: URL) -> Bool {
+        fileManager.directoryExists(at: url)
     }
 }
 
-//MARK: - UITableViewDelegate
-extension FileSystemViewController {
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-        
-        let selectedItem = contents[indexPath.row]
-        if fileManager.fileManager.directoryExists(at: selectedItem) {
-            currentDirectory = selectedItem
-            loadContents()
-            updateLeftBarButtonItem()
-        } else {
-            showTextInsideFileAlert(at: selectedItem,
-                                    message: FileSystemManager.loadTextFromFile(at: selectedItem)) { [self] text in
-                guard let text = text else {
-                    print("Text is nil")
-                    return
-                }
-                fileManager.saveTextToFile(text: text, at: selectedItem)
-            }
-        }
-    }
-    
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let item = contents[indexPath.row]
-        do {
-            try fileManager.removeItem(at: item)
-            contents.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
-        } catch {
-            print("Error deleting: \(error.localizedDescription)")
-        }
+private extension FileSystemViewController {
+    private func setupConstraints() {
+        NSLayoutConstraint.activate([
+            fileSystemView.topAnchor.constraint(equalTo: view.topAnchor),
+            fileSystemView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            fileSystemView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            fileSystemView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 }

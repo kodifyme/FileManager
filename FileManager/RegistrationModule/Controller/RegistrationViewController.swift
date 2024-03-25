@@ -10,17 +10,18 @@ import UIKit
 class RegistrationViewController: UIViewController {
     
     // hw
-    /* // 2. Capitalization chekhing
-       // 9. replacingOccurrences
-       // 10. setTextField -> restrict specific symbols
-      // 1. stored random text
-     //    different contents -> different roots by user name
-     // 11. file/folders user naming
+    /*
+     // incapsulate filemanager (methods, properties) in FileSystemManager
+     // hide/incapsulate some parameteres/values like in Adapter Pattern in FileService
+     // FSVC - mvc ????
      */
     
-// 3. wrong pass alert +?
-// 6. cell ordering
-
+    
+    // init or some way tto make user non-optional in FSVC
+    //documentURL – duplicating -> to computed property
+    //addFolderButtonTapped — large method
+    // 6. cell sorting ??
+    // DataSource Delegate methods
     
     private let registrationView = RegistrationView()
     
