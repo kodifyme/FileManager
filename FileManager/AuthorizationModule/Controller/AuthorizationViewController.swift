@@ -11,7 +11,7 @@ class AuthorizationViewController: UIViewController {
     
     private let authorizationView = AuthorizationView()
     let fileManager = FileSystemManager.shared
-    let userDefaults = UserDefaultsManager.shared
+    let userManager = UserDefaultsManager.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,17 +45,14 @@ extension AuthorizationViewController: AuthorizationViewDelegate {
     func loginButtonTapped(login: String?, password: String?) {
         guard let login = login,
               let password = password,
-              let user = userDefaults.getUser(for: login, password: password) else {
+              let user = userManager.getUser(for: login, password: password) else {
             failedLogin(title: "Неверные данные", message: "")
             return
         }
-
-        do {
-            try fileManager.createDirectory(for: user)
-            navigationController?.pushViewController(FileSystemViewController(), animated: true)
-        } catch {
-            print("Error creating directory for user: \(error.localizedDescription)")
-        }
+        userManager.setLoginStatus(isLoggedIn: true)
+        userManager.saveCurrentUsername(user.name)
+        navigationController?.pushViewController(FileSystemViewController(), animated: true)
+        
     }
 }
 

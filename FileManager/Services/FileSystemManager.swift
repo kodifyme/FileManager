@@ -17,6 +17,7 @@ protocol FileSystemService {
     func saveTextToFile(text: Data, at url: URL)
     func createFile(atPath: String, contents: Data?)
     func directoryExists(at url: URL) -> Bool
+    func itemExists(atPath path: String) -> Bool
 }
 
 class FileManagerAdapter: FileSystemService {
@@ -82,6 +83,10 @@ class FileManagerAdapter: FileSystemService {
         fileManager.createFile(atPath: atPath, contents: contents)
     }
     
+    func itemExists(atPath path: String) -> Bool {
+        return fileManager.fileExists(atPath: path)
+    }
+    
     func directoryExists(at url: URL) -> Bool {
         var isDirectory: ObjCBool = false
         if fileManager.fileExists(atPath: url.path, isDirectory: &isDirectory) {
@@ -141,15 +146,19 @@ class FileSystemManager {   //FileService
     func directoryExists(at url: URL) -> Bool {
         fileSystemService.directoryExists(at: url)
     }
-//    //MARK: - Unique Name
-//    func uniqueName(for baseName: String, in directory: URL) -> String {
-//        var name = baseName
-//        var count = 1
-//        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
-//        while allFiles?.contains("\(name)") ?? false {
-//            count += 1
-//            name = "\(baseName) \(count)"
-//        }
-//        return name
-//    }
+    
+    func itemExists(atPath path: String) -> Bool {
+        fileSystemService.itemExists(atPath: path)
+    }
+    //    //MARK: - Unique Name
+    //    func uniqueName(for baseName: String, in directory: URL) -> String {
+    //        var name = baseName
+    //        var count = 1
+    //        let allFiles = try? FileSystemManager.shared.fileManager.contentsOfDirectory(atPath: directory.path)
+    //        while allFiles?.contains("\(name)") ?? false {
+    //            count += 1
+    //            name = "\(baseName) \(count)"
+    //        }
+    //        return name
+    //    }
 }

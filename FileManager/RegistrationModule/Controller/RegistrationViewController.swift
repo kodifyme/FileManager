@@ -14,11 +14,10 @@ class RegistrationViewController: UIViewController {
      // incapsulate filemanager (methods, properties) in FileSystemManager
      // hide/incapsulate some parameteres/values like in Adapter Pattern in FileService
      // FSVC - mvc ????
+     // init or some way tto make user non-optional in FSVC
+     //documentURL – duplicating -> to computed property
      */
     
-    
-    // init or some way tto make user non-optional in FSVC
-    //documentURL – duplicating -> to computed property
     //addFolderButtonTapped — large method
     // 6. cell sorting ??
     // DataSource Delegate methods

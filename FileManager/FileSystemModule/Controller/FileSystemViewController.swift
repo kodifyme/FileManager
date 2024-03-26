@@ -10,12 +10,11 @@ import UIKit
 class FileSystemViewController: UIViewController {
     
     let fileManager = FileSystemManager.shared
-    let usertManager = UserDefaultsManager.shared
+    let userManager = UserDefaultsManager.shared
     var contents: [URL] = []
     var currentDirectory: URL?
     
     private let fileSystemView = FileSystemView()
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +48,14 @@ class FileSystemViewController: UIViewController {
     }
     
     private func showRootDirectoryContents() {
-        currentDirectory = fileManager.showRootDirectoryContents()
-        loadContents()
+        guard let username = userManager.getUsername() else { return }
+        if let documentURL = fileManager.showRootDirectoryContents() {
+            let userDirectory = documentURL.appendingPathComponent(username)
+            try? fileManager.createDirectory(at: userDirectory)
+            currentDirectory = userDirectory
+            loadContents()
+        }
+        
         print(currentDirectory)
     }
     
@@ -61,7 +66,7 @@ class FileSystemViewController: UIViewController {
     }
     
     private func updateLeftBarButtonItem() {
-        if let currentDirectory = currentDirectory, currentDirectory != fileManager.showRootDirectoryContents() {
+        if let currentDirectory = currentDirectory, currentDirectory != fileManager.showRootDirectoryContents()?.appendingPathComponent(userManager.getUsername() ?? "") {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Назад", style: .plain, target: self, action: #selector(backButtonTapped))
         } else {
             navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Выход", style: .plain, target: self, action: #selector(logoutButtonTapped))
@@ -74,7 +79,7 @@ class FileSystemViewController: UIViewController {
             guard let folderName = folderName,
                   !folderName.isEmpty,
                   let directory = self.currentDirectory else { return }
-            let newFolderURL = directory.appendingPathComponent(folderName, 
+            let newFolderURL = directory.appendingPathComponent(folderName,
                                                                 isDirectory: true)
             do {
                 try self.fileManager.createDirectory(at: newFolderURL)
@@ -105,20 +110,25 @@ class FileSystemViewController: UIViewController {
             guard let fileName = fileName, !fileName.isEmpty, let directory = self.currentDirectory else { return }
             let newFileURL = directory.appendingPathComponent(fileName)
             let text = "".data(using: .utf8)
-            self.fileManager.createFile(atPath: newFileURL.path, contents: text)
-            self.fileManager.saveTextToFile(text: text!, at: newFileURL)
-            self.contents.append(newFileURL)
-            let indexPath = IndexPath(row: self.contents.count - 1, section: 0)
-            self.fileSystemView.beginUpdates()
-            self.fileSystemView.insertRows(at: [indexPath], with: .automatic)
-            self.fileSystemView.endUpdates()
-            print("Файл - \(fileName) создан")
+            
+            if !self.fileManager.itemExists(atPath: newFileURL.path) {
+                self.fileManager.createFile(atPath: newFileURL.path, contents: text)
+                self.fileManager.saveTextToFile(text: text!, at: newFileURL)
+                self.contents.append(newFileURL)
+                let indexPath = IndexPath(row: self.contents.count - 1, section: 0)
+                self.fileSystemView.beginUpdates()
+                self.fileSystemView.insertRows(at: [indexPath], with: .automatic)
+                self.fileSystemView.endUpdates()
+                print("Файл - \(fileName) создан")
+            } else {
+                print("Error creating file: A file or folder with the same name already exists.")
+            }
         }
     }
     
     @objc
     private func logoutButtonTapped() {
-        guard currentDirectory == fileManager.showRootDirectoryContents() else { return }
+        userManager.setLoginStatus(isLoggedIn: false)
         navigationController?.popToRootViewController(animated: true)
     }
     

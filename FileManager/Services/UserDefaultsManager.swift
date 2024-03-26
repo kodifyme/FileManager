@@ -14,31 +14,18 @@ struct  UserDefaultsManager {
     private init() { }
     
     private let defaults = UserDefaults.standard
-    
-    private let loginKey = "login"
-    private let passwordKey = "password"
+
     private let isLoggedInKey = "isLoggedIn"
     private let usersKey = "users"
     private let userID = "userID"
-    
-    func getLogin() -> String? {
-        defaults.string(forKey: loginKey)
-    }
-    
-    func getPassword() -> String? {
-        defaults.string(forKey: passwordKey)
-    }
+    private let usernameKey = "username"
     
     func isLoggedIn() -> Bool {
         defaults.bool(forKey: isLoggedInKey)
     }
     
-    func removeLoggedInStatus() {
-        defaults.removeObject(forKey: isLoggedInKey)
-    }
-    
-    func getUserID() -> String? {
-        defaults.string(forKey: userID)
+    func setLoginStatus(isLoggedIn: Bool) {
+        defaults.set(isLoggedIn, forKey: isLoggedInKey)
     }
     
     func saveUser(user: User) { //check existing here
@@ -71,14 +58,12 @@ struct  UserDefaultsManager {
         return users.first { $0.name == login && $0.password == password }
     }
     
-    func loginUser(_ user: User) {
-        defaults.set(user.userID, forKey: userID)
-        defaults.set(true, forKey: isLoggedInKey)
+    func saveCurrentUsername(_ username: String) {
+        defaults.set(username, forKey: usernameKey)
     }
     
-    func logoutUser() {
-        defaults.removeObject(forKey: userID)
-        defaults.set(false, forKey: isLoggedInKey)
+    func getUsername() -> String? {
+        defaults.string(forKey: usernameKey)
     }
     
     func removeAllUsers() {
