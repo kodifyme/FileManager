@@ -9,11 +9,11 @@ import UIKit
 
 protocol RegistrationViewDelegate: AnyObject {
     func skipButtonTapped()
+    func clearText()
+    func setBorderColor(_ color: UIColor)
 }
 
 protocol RegistrationViewDataSource: AnyObject {
-    func clearText()    //-> Delegate method
-    func setBorderColor(_ color: UIColor) //-> Delegate method
     func getButtonFrame() -> CGRect
 }
 
@@ -116,6 +116,18 @@ class RegistrationView: UIView {
         passwordTextField.delegate = self
     }
     
+    func setBorderColor(_ color: UIColor) {
+        nameTextField.setBorderColor(color)
+        passwordTextField.setBorderColor(color)
+        numberTextField.setBorderColor(color)
+    }
+    
+    func clearText() {
+        nameTextField.setText(to: nil)
+        passwordTextField.setText(to: nil)
+        numberTextField.setText(to: nil)
+    }
+    
     @objc
     private func sliderValueChanged() {
         ageLabel.text = "Возраст: \(Int(ageSlider.value))"
@@ -132,15 +144,14 @@ class RegistrationView: UIView {
             return
         }
         
-        guard !UserDefaultsManager.shared.userExists(name: user.name) else {    //incapsulte?
-            print("Error: User already registered")
-            return
+        let registrationResult = UserDefaultsManager.shared.registerUser(user)
+        if registrationResult.success {
+            print("User registered successfully")
+            print("\(UserDefaultsManager.shared.getUsers())")
+            handleSkipButtonTap()
+        } else if let error = registrationResult.error {
+            print("Registration failed: \(error)")
         }
-        
-        UserDefaultsManager.shared.saveUser(user: user)
-        print("\(UserDefaultsManager.shared.getUsers())")
-        handleSkipButtonTap()
-        print("Имя: \(user.name),\nПароль: \(user.password) \nНомер телефона: \(user.phoneNumber), \(user.userID)")
     }
     
     @objc
@@ -249,20 +260,8 @@ private extension RegistrationView {
 //MARK: - RegistrationViewDataSource
 extension RegistrationView: RegistrationViewDataSource {
     
-    func setBorderColor(_ color: UIColor) {
-        nameTextField.setBorderColor(color)
-        passwordTextField.setBorderColor(color)
-        numberTextField.setBorderColor(color)
-    }
-    
     func getButtonFrame() -> CGRect {
         registrationButton.frame
-    }
-    
-    func clearText() {
-        nameTextField.setText(to: nil)
-        passwordTextField.setText(to: nil)
-        numberTextField.setText(to: nil)
     }
 }
 

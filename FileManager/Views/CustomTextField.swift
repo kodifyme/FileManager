@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol TextFieldDataSource: AnyObject {
+protocol TextFieldDelegate: AnyObject {
     func setText(to text: String?)
     func setBorderColor(_ color: UIColor)
 }
@@ -67,10 +67,7 @@ final class CustomTextField: UITextField {
         // use for shorting code / refactoring
 //        let allowedCharacters = CharacterSet.letters
 //        return result.rangeOfCharacter(from: allowedCharacters.inverted) == nil
-            
 
-        
-        
         if range.length == 1 {
             let endIndex = text.index(text.startIndex, offsetBy: text.count - 1) //endIndex
             result = String(text[text.startIndex..<endIndex])
@@ -84,7 +81,6 @@ final class CustomTextField: UITextField {
             result = uppercaseFirstChar + String(result.dropLast())
         }
         
-        //myString.capitalized == myString
         
         //text.replacingOccurrences(of: <#T##StringProtocol#>, with: <#T##StringProtocol#>, range: <#T##Range<String.Index>?#>) //use for code shorting (refactoring)
         
@@ -101,7 +97,7 @@ final class CustomTextField: UITextField {
 }
 
 //MARK: - TextFieldDataSource
-extension CustomTextField: TextFieldDataSource {
+extension CustomTextField: TextFieldDelegate {
     
     func setText(to text: String?) {
         self.text = text

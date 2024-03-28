@@ -9,6 +9,11 @@ import Foundation
 
 struct  UserDefaultsManager {
     
+    struct RegistrationResult {
+        var success: Bool
+        var error: String?
+    }
+    
     static let shared = UserDefaultsManager()
     
     private init() { }
@@ -68,5 +73,17 @@ struct  UserDefaultsManager {
     
     func removeAllUsers() {
         defaults.removeObject(forKey: usersKey)
+    }
+}
+
+extension UserDefaultsManager {
+    
+    func registerUser(_ user: User) -> RegistrationResult {
+        if userExists(name: user.name) {
+            return RegistrationResult(success: false, error: "User already registered")
+        } else {
+            saveUser(user: user)
+            return RegistrationResult(success: true, error: nil)
+        }
     }
 }

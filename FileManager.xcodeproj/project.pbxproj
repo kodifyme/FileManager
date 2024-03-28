@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		120FDF522BB563B2000F0A36 /* FileSystemViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120FDF512BB563B2000F0A36 /* FileSystemViewDelegate.swift */; };
+		120FDF542BB563D4000F0A36 /* FileSystemViewDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 120FDF532BB563D4000F0A36 /* FileSystemViewDataSource.swift */; };
 		1213B76C2B96614200477D0D /* AuthorizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1213B76B2B96614200477D0D /* AuthorizationView.swift */; };
 		1222AFE42B91DA9A00A2DAAD /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1222AFE32B91DA9A00A2DAAD /* User.swift */; };
 		1241A29B2B7CB918006CEE16 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A29A2B7CB918006CEE16 /* AppDelegate.swift */; };
@@ -17,7 +19,6 @@
 		1241A2B22B7CC689006CEE16 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B12B7CC689006CEE16 /* CustomTextField.swift */; };
 		1241A2B62B7CD923006CEE16 /* UILabel + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */; };
 		1241A2B82B7D3C80006CEE16 /* UIStackView + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */; };
-		12671D0B2BB1DF9000F3D89F /* FileSystemProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12671D0A2BB1DF9000F3D89F /* FileSystemProtocols.swift */; };
 		126D75DB2B7FE45000DA01FF /* String + Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 126D75DA2B7FE45000DA01FF /* String + Extensions.swift */; };
 		129099C22B910E1900FA409F /* NavigationControllerBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129099C12B910E1900FA409F /* NavigationControllerBuilder.swift */; };
 		129099C82B9117C100FA409F /* RegistrationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 129099C72B9117C100FA409F /* RegistrationView.swift */; };
@@ -30,6 +31,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		120FDF512BB563B2000F0A36 /* FileSystemViewDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewDelegate.swift; sourceTree = "<group>"; };
+		120FDF532BB563D4000F0A36 /* FileSystemViewDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewDataSource.swift; sourceTree = "<group>"; };
 		1213B76B2B96614200477D0D /* AuthorizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthorizationView.swift; sourceTree = "<group>"; };
 		1222AFE32B91DA9A00A2DAAD /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		1241A2972B7CB918006CEE16 /* FileManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FileManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -42,7 +45,6 @@
 		1241A2B12B7CC689006CEE16 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 		1241A2B52B7CD923006CEE16 /* UILabel + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel + Extensions.swift"; sourceTree = "<group>"; };
 		1241A2B72B7D3C80006CEE16 /* UIStackView + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView + Extensions.swift"; sourceTree = "<group>"; };
-		12671D0A2BB1DF9000F3D89F /* FileSystemProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemProtocols.swift; sourceTree = "<group>"; };
 		126D75DA2B7FE45000DA01FF /* String + Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String + Extensions.swift"; sourceTree = "<group>"; };
 		129099C12B910E1900FA409F /* NavigationControllerBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationControllerBuilder.swift; sourceTree = "<group>"; };
 		129099C72B9117C100FA409F /* RegistrationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationView.swift; sourceTree = "<group>"; };
@@ -65,6 +67,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		120FDF4F2BB56380000F0A36 /* Delegates */ = {
+			isa = PBXGroup;
+			children = (
+				120FDF512BB563B2000F0A36 /* FileSystemViewDelegate.swift */,
+			);
+			path = Delegates;
+			sourceTree = "<group>";
+		};
+		120FDF502BB56388000F0A36 /* DataSources */ = {
+			isa = PBXGroup;
+			children = (
+				120FDF532BB563D4000F0A36 /* FileSystemViewDataSource.swift */,
+			);
+			path = DataSources;
+			sourceTree = "<group>";
+		};
 		1213B76A2B96611800477D0D /* AuthorizationModule */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,7 +207,8 @@
 		12671D092BB1DF5D00F3D89F /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
-				12671D0A2BB1DF9000F3D89F /* FileSystemProtocols.swift */,
+				120FDF502BB56388000F0A36 /* DataSources */,
+				120FDF4F2BB56380000F0A36 /* Delegates */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -315,9 +334,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				120FDF542BB563D4000F0A36 /* FileSystemViewDataSource.swift in Sources */,
 				1241A2B62B7CD923006CEE16 /* UILabel + Extensions.swift in Sources */,
 				1241A2B82B7D3C80006CEE16 /* UIStackView + Extensions.swift in Sources */,
-				12671D0B2BB1DF9000F3D89F /* FileSystemProtocols.swift in Sources */,
 				12A767572B8F62C1005D8F3C /* FileSystemManager.swift in Sources */,
 				129099C82B9117C100FA409F /* RegistrationView.swift in Sources */,
 				1241A2B22B7CC689006CEE16 /* CustomTextField.swift in Sources */,
@@ -332,6 +351,7 @@
 				1241A29D2B7CB918006CEE16 /* SceneDelegate.swift in Sources */,
 				129099C22B910E1900FA409F /* NavigationControllerBuilder.swift in Sources */,
 				126D75DB2B7FE45000DA01FF /* String + Extensions.swift in Sources */,
+				120FDF522BB563B2000F0A36 /* FileSystemViewDelegate.swift in Sources */,
 				12ADF8882B8515B60068E2A3 /* FileSystemViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -55,7 +55,6 @@ class FileSystemViewController: UIViewController {
             currentDirectory = userDirectory
             loadContents()
         }
-        
         print(currentDirectory)
     }
     
@@ -83,21 +82,7 @@ class FileSystemViewController: UIViewController {
                                                                 isDirectory: true)
             do {
                 try self.fileManager.createDirectory(at: newFolderURL)
-                self.contents.sort(by: {
-                    if $0.hasDirectoryPath && $1.hasDirectoryPath {
-                        return $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
-                    } else if $0.hasDirectoryPath {
-                        return true
-                    } else if $1.hasDirectoryPath {
-                        return false
-                    } else {
-                        return $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
-                    }
-                })
-                let indexForFolder = self.contents.firstIndex { $0.lastPathComponent > newFolderURL.lastPathComponent } ?? self.contents.endIndex
-                self.contents.insert(newFolderURL, at: indexForFolder)
-                let indexPath = IndexPath(row: indexForFolder, section: 0)
-                self.fileSystemView.insertRows(at: [indexPath], with: .automatic)
+                self.insertNewFolder(newFolderURL: newFolderURL)
             } catch {
                 print("Error creating folder: \(error.localizedDescription)")
             }
@@ -143,6 +128,25 @@ class FileSystemViewController: UIViewController {
     }
 }
 
+//MARK: - Insert New Folder
+private extension FileSystemViewController {
+    func insertNewFolder(newFolderURL: URL) {
+        self.contents.sort {
+            let isDir0 = $0.hasDirectoryPath
+            let isDir1 = $1.hasDirectoryPath
+            if isDir0 == isDir1 {
+                return $0.lastPathComponent.localizedStandardCompare($1.lastPathComponent) == .orderedAscending
+            }
+            return isDir0 && !isDir1
+        }
+        let indexForFolder = self.contents.firstIndex { $0.lastPathComponent > newFolderURL.lastPathComponent } ?? self.contents.endIndex
+        self.contents.insert(newFolderURL, at: indexForFolder)
+        let indexPath = IndexPath(row: indexForFolder, section: 0)
+        self.fileSystemView.insertRows(at: [indexPath], with: .automatic)
+    }
+}
+
+//MARK: - FileSystemViewDelegate
 extension FileSystemViewController: FileSystemViewDelegate {
     func didSelectDirectory(at indexPath: IndexPath) {
         let selectedItem = contents[indexPath.row]
@@ -175,6 +179,7 @@ extension FileSystemViewController: FileSystemViewDelegate {
     }
 }
 
+//MARK: - FileSystemViewDataSource
 extension FileSystemViewController: FileSystemViewDataSource {
     func numberOfItems(inSection section: Int) -> Int {
         contents.count
@@ -189,6 +194,7 @@ extension FileSystemViewController: FileSystemViewDataSource {
     }
 }
 
+//MARK: - Setup Constraints
 private extension FileSystemViewController {
     private func setupConstraints() {
         NSLayoutConstraint.activate([

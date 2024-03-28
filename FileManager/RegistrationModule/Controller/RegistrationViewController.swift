@@ -16,11 +16,11 @@ class RegistrationViewController: UIViewController {
      // FSVC - mvc ????
      // init or some way tto make user non-optional in FSVC
      //documentURL – duplicating -> to computed property
+     //addFolderButtonTapped — large method
+     // DataSource Delegate methods
      */
     
-    //addFolderButtonTapped — large method
     // 6. cell sorting ??
-    // DataSource Delegate methods
     
     private let registrationView = RegistrationView()
     
@@ -37,8 +37,8 @@ class RegistrationViewController: UIViewController {
         super.viewWillAppear(animated)
         
         navigationController?.navigationBar.isHidden = true
-        registrationView.setBorderColor(.gray)
-        registrationView.clearText()
+        setBorderColor(.gray)
+        clearText()
     }
     
     //MARK: - Private Methods
@@ -54,6 +54,14 @@ class RegistrationViewController: UIViewController {
 
 //MARK: - RegistrationViewDelegate
 extension RegistrationViewController: RegistrationViewDelegate {
+    func clearText() {
+        registrationView.clearText()
+    }
+    
+    func setBorderColor(_ color: UIColor) {
+        registrationView.setBorderColor(.gray)
+    }
+    
     func skipButtonTapped() {
         navigationController?.pushViewController(AuthorizationViewController(), animated: true)
     }
